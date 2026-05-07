@@ -27,7 +27,7 @@
     <link rel="stylesheet" href='/assets/css/style.css'>
 
     <!-- favicon -->
-    <link rel="icon" type="image/x-icon" href="/assets/img/sorting-hat.png">
+    <link rel="icon" type="image/x-icon" href="/assets/img/magic-wand.png">
 </head>
 
 <body>
