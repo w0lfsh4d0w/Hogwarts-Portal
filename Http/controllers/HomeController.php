@@ -1,3 +1,5 @@
+<!-- php -S localhost:8888 -->
 <?php
 
-return view('index.view.php' , ['name' =>"Atwaa"]);
+
+return view('home.view.php' );
