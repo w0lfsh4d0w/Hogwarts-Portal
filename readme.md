@@ -2,10 +2,10 @@
 
 ## setup & installation
 
-1. make clone form repo
+1. make clone from repo
 
-```bashhttps://github.com/w0lfsh4d0w/Hogwarts-Portal.git
-git clone
+```bash 
+git clone https://github.com/w0lfsh4d0w/Hogwarts-Portal.git
 ```
 
 2. go to repo in your PC
