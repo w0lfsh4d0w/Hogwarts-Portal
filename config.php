@@ -4,7 +4,7 @@ return [
     'database' => [
         'host' => 'localhost',
         'port' => 3307,
-        'dbname' => 'api',
+        'dbname' => 'Hogwarts',
         'charset' => 'utf8mb4'
     ]
 ];
