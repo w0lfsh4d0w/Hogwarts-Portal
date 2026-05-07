@@ -1,0 +1,4 @@
+<?php
+/*
+* INDEX.VIEW.PHP
+*/
