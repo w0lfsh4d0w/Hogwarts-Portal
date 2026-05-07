@@ -1,3 +1,11 @@
+/* 
+    Main color =>  2E1A47
+    Secondary color => FFD700
+    gradient=> linear-gradient(135deg, #2E1A47 0%, #1C0E3A 100%)
+*/
+
+
+/* ========= Start Global */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -32,7 +40,10 @@ body {
     min-height: 100vh;
 }
 
-/* =========navbar */
+/* ========= End Global */
+
+
+/* ========= Start navbar */
 .navbar {
     background: linear-gradient(135deg, #2E1A47 0%, #1C0E3A 100%);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
@@ -104,6 +115,8 @@ body {
     border-radius: 5px;
     transition: all 0.3s ease;
     box-shadow: #FFD700 0 0 8px;
+    text-align: center;
+    line-height: 1.9;
 }
 
 .navbar .register:hover,
@@ -114,53 +127,10 @@ body {
     text-shadow: 0 0 8px rgba(255, 215, 0, 0.8);
 }
 
+/* ========= End navbar */
 
 
-/* ========== Footer */
-.site-footer {
-    background: linear-gradient(180deg, rgba(14, 26, 64, 0.95), rgba(10, 12, 31, 0.95));
-    border-top: 1px solid rgba(255, 215, 0, 0.18);
-    padding: 1.7rem 0;
-    color: #e6e6e6;
-}
-
-.site-footer .footer-inner {
-    max-width: 1170px;
-    margin: 0 auto;
-}
-
-.site-footer .footer-copy p {
-    margin: 0;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 0.98rem;
-    letter-spacing: 0.03em;
-    color: #cfcfcf;
-}
-
-.site-footer .footer-logo img {
-    max-width: 90px;
-    border-radius: 16px;
-    border: 1px solid rgba(255, 215, 0, 0.25);
-    box-shadow: 0 12px 30px rgba(255, 215, 0, 0.18);
-    transition: transform 0.35s ease, filter 0.35s ease;
-}
-
-.site-footer .footer-logo img:hover {
-    transform: translateY(-3px);
-    filter: drop-shadow(0 0 18px rgba(255, 215, 0, 0.4));
-}
-
-@media (max-width: 767px) {
-    .site-footer {
-        padding: 1.4rem 0;
-    }
-
-    .site-footer .footer-logo {
-        margin-top: 1rem;
-    }
-}
-
-/* ========== Home Section */
+/* ========== Start Home Section */
 .home {
     background: linear-gradient(135deg, #2E1A47 0%, #1C0E3A 100%);
     background-size: cover;
@@ -180,7 +150,7 @@ body {
     position: absolute;
     inset: 0;
     background: radial-gradient(circle at top left, rgba(255, 215, 0, 0.14), transparent 30%),
-                radial-gradient(circle at bottom right, rgba(255, 255, 255, 0.08), transparent 28%);
+        radial-gradient(circle at bottom right, rgba(255, 255, 255, 0.08), transparent 28%);
     pointer-events: none;
 }
 
@@ -236,8 +206,8 @@ body {
     height: auto;
     border-radius: 30px;
     box-shadow: 0 24px 70px rgba(0, 0, 0, 0.35);
-    animation: imageDropIn 1s ease both, imageFloat 2s ease-in-out  infinite;
-    -webkit-animation: imageDropIn 1s ease both, imageFloat 2s ease-in-out  infinite;
+    animation: imageDropIn 1s ease both, imageFloat 2s ease-in-out infinite;
+    -webkit-animation: imageDropIn 1s ease both, imageFloat 2s ease-in-out infinite;
 }
 
 @keyframes titleSlideIn {
@@ -245,6 +215,7 @@ body {
         opacity: 0;
         transform: translateX(-40px);
     }
+
     100% {
         opacity: 1;
         transform: translateX(0);
@@ -256,6 +227,7 @@ body {
         opacity: 0;
         transform: translateY(-50px) scale(0.98);
     }
+
     100% {
         opacity: 1;
         transform: translateY(0) scale(1);
@@ -263,9 +235,12 @@ body {
 }
 
 @keyframes imageFloat {
-    0%, 100% {
+
+    0%,
+    100% {
         transform: translateY(0) scale(1);
     }
+
     50% {
         transform: translateY(-15px) scale(1.01);
     }
@@ -276,6 +251,7 @@ body {
         opacity: 0;
         transform: translateX(-20px);
     }
+
     100% {
         opacity: 1;
         transform: translateX(0);
@@ -304,7 +280,12 @@ body {
     }
 }
 
-/* ========== About Section */
+/* ========== End Home Section */
+
+
+
+
+/* ========== Start About Section */
 .about-row {
     width: min(1150px, 100%);
     margin: 0 auto;
@@ -393,6 +374,54 @@ body {
     }
 }
 
+/* ========== End About Section */
 
-/* ============Footer */
 
+
+
+
+/* ========== Start Footer */
+.site-footer {
+    background: linear-gradient(180deg, rgba(14, 26, 64, 0.95), rgba(10, 12, 31, 0.95));
+    border-top: 1px solid rgba(255, 215, 0, 0.18);
+    padding: 1.7rem 0;
+    color: #e6e6e6;
+}
+
+.site-footer .footer-inner {
+    max-width: 1170px;
+    margin: 0 auto;
+}
+
+.site-footer .footer-copy p {
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.98rem;
+    letter-spacing: 0.03em;
+    color: #cfcfcf;
+}
+
+.site-footer .footer-logo img {
+    max-width: 90px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 215, 0, 0.25);
+    box-shadow: 0 12px 30px rgba(255, 215, 0, 0.18);
+    transition: transform 0.35s ease, filter 0.35s ease;
+}
+
+.site-footer .footer-logo img:hover {
+    transform: translateY(-3px);
+    filter: drop-shadow(0 0 18px rgba(255, 215, 0, 0.4));
+}
+
+@media (max-width: 767px) {
+    .site-footer {
+        padding: 1.4rem 0;
+    }
+
+    .site-footer .footer-logo {
+        margin-top: 1rem;
+    }
+}
+
+/* ========== End Footer */

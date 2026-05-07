@@ -10,6 +10,7 @@
         <a class="nav-link active" aria-current="page" href="#home">Home</a>
         <a class="nav-link" href="#about">About</a>
         <a class="nav-link" href="#services">Services</a>
+        <a class="nav-link" href="#services">Dashboard</a>
         <a class="nav-link register me-5" href="#">Registe/ Login</a> 
         
         
