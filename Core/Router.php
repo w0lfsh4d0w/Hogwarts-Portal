@@ -56,9 +56,14 @@ class Router
     {
         foreach ($this->routes as $route) {
             if ($route['uri'] === $uri && $route['method'] === strtoupper($method)) {
-                // applay the middleware
-            Middleware::resolve($route['middleware']);
-                return require base_path('Http/controllers/' . $route['controller']);
+
+                Middleware::resolve($route['middleware']);
+
+                [$controller, $action] = explode('@', $route['controller']);
+
+                $controller = "Controllers\\$controller";
+
+                return (new $controller)->$action();
             }
         }
 
