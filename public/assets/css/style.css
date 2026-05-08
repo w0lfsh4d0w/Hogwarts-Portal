@@ -1,7 +1,7 @@
-/* 
-    Main color =>  2E1A47
-    Secondary color => FFD700
-    gradient=> linear-gradient(135deg, #2E1A47 0%, #1C0E3A 100%)
+/*
+    Main color =>  0E1A40 (Midnight Blue)
+    Secondary color => 946B2D (Bronze)
+    gradient=> linear-gradient(135deg, #0E1A40 0%, #0A1429 100%)
 */
 
 
@@ -45,9 +45,9 @@ body {
 
 /* ========= Start navbar */
 .navbar {
-    background: linear-gradient(135deg, #2E1A47 0%, #1C0E3A 100%);
+    background: linear-gradient(135deg, #0E1A40 0%, #0A1429 100%);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    border-bottom: 2px solid #FFD700;
+    border-bottom: 2px solid #946B2D;
     transition: box-shadow 0.3s ease;
     position: sticky;
     top: 0;
@@ -58,7 +58,7 @@ body {
     font-family: 'Dancing Script', cursive;
     font-size: 2rem;
     font-weight: 700;
-    color: #FFD700 !important;
+    color: #946B2D !important;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
@@ -71,23 +71,23 @@ body {
 }
 
 .navbar-nav .nav-link:hover {
-    color: #FFD700 !important;
+    color: #946B2D !important;
     transform: translateY(-2px);
-    text-shadow: 0 0 8px rgba(255, 215, 0, 0.8);
+    text-shadow: 0 0 8px rgba(148, 107, 45, 0.8);
 }
 
 .navbar-nav .nav-link.active {
-    color: #FFD700 !important;
-    border-bottom: 2px solid #FFD700;
+    color: #946B2D !important;
+    border-bottom: 2px solid #946B2D;
 }
 
 .navbar-toggler {
     border: none;
-    background-color: #FFD700;
+    background-color: #946B2D;
 }
 
 .navbar-toggler-icon {
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28246, 18, 71, 1%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='m4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%2814, 26, 64, 1%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='m4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
 }
 
 /* Smooth collapse animation */

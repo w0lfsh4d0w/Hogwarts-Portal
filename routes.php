@@ -8,3 +8,4 @@
 
 
 $router->get('/', 'HomeController.php');
+$router->get('/dashboard', 'Dashboard/DashboardController.php');
