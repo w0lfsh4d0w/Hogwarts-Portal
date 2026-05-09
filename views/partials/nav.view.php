@@ -7,13 +7,14 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav ms-auto">
-        <a class="nav-link active" aria-current="page" href="#home">Home</a>
+        <a class="nav-link active" aria-current="page" href="/">Home</a>
         <a class="nav-link" href="#about">About</a>
         <a class="nav-link" href="#services">Services</a>
         <a class="nav-link" href="#services">Dashboard</a>
-        <a class="nav-link register me-5" href="#">Registe/ Login</a> 
-        
-        
+        <a class="nav-link register me-5" href="/register">Register</a>
+        <a class="nav-link register me-5" href="">Login</a>
+
+
         <!-- if he make login -->
         <!-- <a class="nav-link logout me-5" href="#">Logout</a> -->
 

@@ -30,7 +30,7 @@ function base_path($path) {
 
 function view($path, $attributes = []) {
     extract($attributes);
-    require base_path('views/'. $path ); // /views/index.view.php
+    require base_path('views/' . $path . '.view.php');
 }
 
 function redirect($path) {

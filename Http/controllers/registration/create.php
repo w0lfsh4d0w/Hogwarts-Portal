@@ -1,5 +1,5 @@
 <?php
 
-view("path", [
-    'key' => "value"
+view("registration/create", [
+    'key' => 'value'
 ]);
