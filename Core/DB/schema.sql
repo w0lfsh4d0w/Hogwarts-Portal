@@ -245,3 +245,78 @@ INSERT INTO DiagonAlleyShop (item_name, item_type, item_price) VALUES
     ('No Sleep Potion',             'Potion Ingredient',  60.00),
     ('Basic Spell Book',            'Spell Book',         120.00),
     ('Dark Magic (PHP)',            'Spell Book',         999.00);
+
+
+-- =============================================
+-- Insert data for Leaderboard
+-- =============================================
+
+    -- Users
+INSERT INTO User (user_name, email, password, role) VALUES
+('Harry James Potter', 'harry@gryffindor.edu', '123456', 'Student'),
+('Hermione Jean Granger', 'hermione@gryffindor.edu', '123456', 'Student'),
+('Draco Lucius Malfoy', 'draco@slytherin.edu', '123456', 'Student'),
+('Luna Lovegood', 'luna@ravenclaw.edu', '123456', 'Student'),
+('Neville Longbottom', 'neville@gryffindor.edu', '123456', 'Student');
+
+-- Students
+INSERT INTO Student (user_id, house_id, balance, status) VALUES
+(1, 1, 1000, 'Active'),
+(2, 1, 1000, 'Active'),
+(3, 2, 1000, 'Active'),
+(4, 3, 1000, 'Active'),
+(5, 1, 1000, 'Active');
+
+-- Wands
+INSERT INTO Wand (student_id, wood_type, core_type) VALUES
+(1, 'Holly', 'Phoenix Feather'),
+(2, 'Willow', 'Dragon Heartstring'),
+(3, 'Hawthorn', 'Unicorn Hair'),
+(4, 'Oak', 'Unicorn Hair'),
+(5, 'Oak', 'Dragon Heartstring');
+
+-- Professor User
+INSERT INTO User (user_name, email, password, role) VALUES
+('Severus Snape', 'snape@hogwarts.edu', '123456', 'Professor');
+
+-- Professor
+INSERT INTO Professor (user_id, professor_name) VALUES
+(6, 'Prof. Severus Snape');
+
+-- Course
+INSERT INTO Course (course_name, professor_id) VALUES
+('Defense Against the Dark Arts', 1),
+('Transfiguration', 1),
+('Potions', 1);
+
+-- Assignments
+INSERT INTO Assignment (course_id, assignment_type, title, max_points, deadline) VALUES
+(1, 'Quiz', 'Basic Defense Spells', 100, '2025-06-01 23:59:00'),
+(2, 'Quiz', 'Transfiguration Theory', 100, '2025-06-05 23:59:00'),
+(3, 'Quiz', 'Potions Basics', 100, '2025-06-10 23:59:00');
+
+-- Submissions
+INSERT INTO Submission (assign_id, student_id, score) VALUES
+(1, 1, 95),
+(1, 2, 98),
+(1, 3, 92),
+(1, 4, 88),
+(1, 5, 85),
+(2, 1, 90),
+(2, 2, 99),
+(2, 3, 88),
+(3, 1, 95),
+(3, 2, 97);
+
+-- HousePoints
+INSERT INTO HousePoints (house_id, student_id, submission_id, points) VALUES
+(1, 1, 1, 95),
+(1, 2, 2, 98),
+(2, 3, 3, 92),
+(3, 4, 4, 88),
+(1, 5, 5, 85),
+(1, 1, 6, 90),
+(1, 2, 7, 99),
+(2, 3, 8, 88),
+(1, 1, 9, 95),
+(1, 2, 10, 97);

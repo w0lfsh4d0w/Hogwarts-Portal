@@ -7,5 +7,7 @@
 // $router->delete('uri', 'controller')->only('auth');
 
 
+
 $router->get('/', 'HomeController.php');
 $router->get('/dashboard', 'Dashboard/DashboardController.php');
+$router->get('/leaderboard', 'Leaderboard/LeaderboardController.php');
