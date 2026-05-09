@@ -1,5 +1,7 @@
 <?php
 include(base_path('views/partials/header.view.php'));
+
+$houseStudentCounts = array_column($houseStats ?? [], 'students_count', 'house_name');
 ?>
 
 <div class="dashboard-container">
@@ -46,8 +48,8 @@ include(base_path('views/partials/header.view.php'));
         <div class="top-bar">
             <h2 id="page-title">Dashboard Overview</h2>
             <div class="top-bar-actions">
-                <button class="btn btn-bronze">Go home</button>
-                <button class="btn btn-bronze">Logout</button>
+                <a href="/" class="btn btn-bronze">Go home</a>
+                <a href="/logout" class="btn btn-bronze">Logout</a>
             </div>
         </div>
 
@@ -56,24 +58,24 @@ include(base_path('views/partials/header.view.php'));
             <!-- Dashboard Overview Section -->
             <section id="dashboard-section" class="dashboard-section active">
                 <h3 class="section-title">Dashboard Overview</h3>
-                <p class="section-date">Current term: April 2025</p>
+                <p class="section-date">Current term: <?php echo date('F Y'); ?></p>
 
                 <!-- Stats Cards -->
                 <div class="stats-grid">
                     <div class="stat-card">
-                        <div class="stat-icon enrolled">23</div>
+                        <div class="stat-icon enrolled"><?php echo $stats['active_students']; ?></div>
                         <p class="stat-label">Enrolled Students</p>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-icon courses">8</div>
+                        <div class="stat-icon courses"><?php echo $stats['total_courses']; ?></div>
                         <p class="stat-label">Active Courses</p>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-icon quizzes">23</div>
+                        <div class="stat-icon quizzes"><?php echo $stats['total_quizzes']; ?></div>
                         <p class="stat-label">Available Quizzes</p>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-icon points">529</div>
+                        <div class="stat-icon points"><?php echo number_format($stats['house_points']); ?></div>
                         <p class="stat-label">Total House Points</p>
                     </div>
                 </div>
@@ -107,19 +109,19 @@ include(base_path('views/partials/header.view.php'));
                 <!-- Student Stats -->
                 <div class="stats-grid">
                     <div class="stat-card">
-                        <div class="stat-icon enrolled">23</div>
+                        <div class="stat-icon enrolled"><?php echo $stats['total_students']; ?></div>
                         <p class="stat-label">Total Students</p>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-icon active">21</div>
+                        <div class="stat-icon active"><?php echo $stats['active_students']; ?></div>
                         <p class="stat-label">Active Students</p>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-icon gryffindor">8</div>
+                        <div class="stat-icon gryffindor"><?php echo $houseStudentCounts['Gryffindor'] ?? 0; ?></div>
                         <p class="stat-label">Gryffindor</p>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-icon slytherin">6</div>
+                        <div class="stat-icon slytherin"><?php echo $houseStudentCounts['Slytherin'] ?? 0; ?></div>
                         <p class="stat-label">Slytherin</p>
                     </div>
                 </div>
@@ -140,48 +142,24 @@ include(base_path('views/partials/header.view.php'));
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>#1</td>
-                                <td>Harry James Potter</td>
-                                <td>harry@gryffindor.edu</td>
-                                <td><span class="house-badge gryffindor">Gryffindor</span></td>
-                                <td>666,666.00</td>
-                                <td>Holly - Phoenix Feather</td>
-                                <td><span class="badge active">Active</span></td>
-                                <td>
-                                    <button class="btn-action show">View</button>
-                                    <button class="btn-action edit">Edit</button>
-                                    <button class="btn-action delete">Deactivate</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>#2</td>
-                                <td>Hermione Jean Granger</td>
-                                <td>hermione@gryffindor.edu</td>
-                                <td><span class="house-badge gryffindor">Gryffindor</span></td>
-                                <td>550.00</td>
-                                <td>Vine - Dragon Heartstring</td>
-                                <td><span class="badge active">Active</span></td>
-                                <td>
-                                    <button class="btn-action show">View</button>
-                                    <button class="btn-action edit">Edit</button>
-                                    <button class="btn-action delete">Deactivate</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>#3</td>
-                                <td>Draco Lucius Malfoy</td>
-                                <td>draco@slytherin.edu</td>
-                                <td><span class="house-badge slytherin">Slytherin</span></td>
-                                <td>1,000.00</td>
-                                <td>Hawthorn - Unicorn Hair</td>
-                                <td><span class="badge active">Active</span></td>
-                                <td>
-                                    <button class="btn-action show">View</button>
-                                    <button class="btn-action edit">Edit</button>
-                                    <button class="btn-action delete">Deactivate</button>
-                                </td>
-                            </tr>
+                            <?php foreach ($Students as $std): ?>
+                                <tr>
+                                    <td><?php echo $std['student_id']; ?></td>
+                                    <td><?php echo $std['user_name']; ?></td>
+                                    <td><?php echo $std['user_email']; ?></td>
+                                    <td><span class="house-badge <?php echo strtolower($std['house']); ?>"><?php echo $std['house']; ?></span></td>
+                                    <td><?php echo number_format($std['balance'], 2); ?></td>
+                                    <td><?php echo $std['wand'] ?? 'Not assigned'; ?></td>
+                                    <td><span class="badge <?php echo strtolower($std['status']); ?>"><?php echo $std['status']; ?></span></td>
+                                    <td>
+                                        <a href="/show-student?id=<?php echo $std['student_id']; ?>" class="btn-action show">View</a>
+                                        <a href="/edit-student?id=<?php echo $std['student_id']; ?>" class="btn-action edit">Edit</a>
+                                        <a href="/delete-student?id=<?php echo $std['student_id']; ?>" class="btn-action delete">Delete</a>
+                                    </td>
+                                </tr>
+                            <?php
+                            endforeach;
+                            ?>
                         </tbody>
                     </table>
                 </div>
@@ -191,55 +169,58 @@ include(base_path('views/partials/header.view.php'));
                     <h4 class="form-title">
                         <i class="fa-solid fa-user-plus"></i> Enroll New Student
                     </h4>
-                    <form class="enroll-form">
+                    <form method="POST" action="/store-student" class="enroll-form">
                         <div class="form-row">
                             <div class="form-group">
                                 <label>Full Name</label>
-                                <input type="text" class="form-control" placeholder="Enter full name">
+                                <input type="text" name="user_name" class="form-control" placeholder="Enter full name" required>
                             </div>
                             <div class="form-group">
                                 <label>Email Address</label>
-                                <input type="email" class="form-control" placeholder="Enter email">
+                                <input type="email" name="email" class="form-control" placeholder="Enter email" required>
                             </div>
                             <div class="form-group">
                                 <label>House</label>
-                                <select class="form-control">
-                                    <option>Gryffindor</option>
-                                    <option>Slytherin</option>
-                                    <option>Ravenclaw</option>
-                                    <option>Hufflepuff</option>
+                                <select name="house" class="form-control" required>
+                                    <option value="">Select House</option>
+                                    <option value="Gryffindor">Gryffindor</option>
+                                    <option value="Slytherin">Slytherin</option>
+                                    <option value="Ravenclaw">Ravenclaw</option>
+                                    <option value="Hufflepuff">Hufflepuff</option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group">
                                 <label>Password</label>
-                                <input type="password" class="form-control" placeholder="Enter password">
+                                <input type="password" name="password" class="form-control" placeholder="Enter password" required>
                             </div>
                             <div class="form-group">
                                 <label>Initial Balance</label>
-                                <input type="number" class="form-control" placeholder="1000.00" value="1000.00">
+                                <input type="number" name="balance" step="0.01" class="form-control" placeholder="1000.00" value="1000.00" required>
                             </div>
                             <div class="form-group">
                                 <label>Wand Wood</label>
-                                <select class="form-control">
-                                    <option>Holly</option>
-                                    <option>Yew</option>
-                                    <option>Elder</option>
-                                    <option>Willow</option>
-                                    <option>Hawthorn</option>
-                                    <option>Oak</option>
+                                <select name="wood_type" class="form-control" required>
+                                    <option value="">Select Wood</option>
+                                    <option value="Holly">Holly</option>
+                                    <option value="Yew">Yew</option>
+                                    <option value="Elder">Elder</option>
+                                    <option value="Willow">Willow</option>
+                                    <option value="Hawthorn">Hawthorn</option>
+                                    <option value="Oak">Oak</option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group">
                                 <label>Wand Core</label>
-                                <select class="form-control">
-                                    <option>Phoenix Feather</option>
-                                    <option>Dragon Heartstring</option>
-                                    <option>Unicorn Hair</option>
-                                    <option>Thestral Tail Hair</option>
+                                <select name="core_type" class="form-control" required>
+                                    <option value="">Select Core</option>
+                                    <option value="Phoenix Feather">Phoenix Feather</option>
+                                    <option value="Dragon Heartstring">Dragon Heartstring</option>
+                                    <option value="Unicorn Hair">Unicorn Hair</option>
+                                    <option value="Thestral Tail Hair">Thestral Tail Hair</option>
                                 </select>
                             </div>
                         </div>
@@ -259,19 +240,19 @@ include(base_path('views/partials/header.view.php'));
                 <!-- Professor Stats -->
                 <div class="stats-grid">
                     <div class="stat-card">
-                        <div class="stat-icon professors">12</div>
+                        <div class="stat-icon professors"><?php echo $stats['total_professors']; ?></div>
                         <p class="stat-label">Total Professors</p>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-icon active">12</div>
+                        <div class="stat-icon active"><?php echo $stats['total_professors']; ?></div>
                         <p class="stat-label">Active Professors</p>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-icon courses">8</div>
+                        <div class="stat-icon courses"><?php echo $stats['total_courses']; ?></div>
                         <p class="stat-label">Courses Teaching</p>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-icon quizzes">23</div>
+                        <div class="stat-icon quizzes"><?php echo $stats['total_assignments']; ?></div>
                         <p class="stat-label">Quizzes Created</p>
                     </div>
                 </div>
@@ -291,45 +272,21 @@ include(base_path('views/partials/header.view.php'));
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>#1</td>
-                                <td>Prof. Albus Dumbledore</td>
-                                <td>dumbledore@hogwarts.edu</td>
-                                <td>3</td>
-                                <td>45</td>
-                                <td><span class="badge active">Active</span></td>
-                                <td>
-                                    <button class="btn-action show">View</button>
-                                    <button class="btn-action edit">Edit</button>
-                                    <button class="btn-action delete">Remove</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>#2</td>
-                                <td>Prof. Severus Snape</td>
-                                <td>snape@hogwarts.edu</td>
-                                <td>2</td>
-                                <td>28</td>
-                                <td><span class="badge active">Active</span></td>
-                                <td>
-                                    <button class="btn-action show">View</button>
-                                    <button class="btn-action edit">Edit</button>
-                                    <button class="btn-action delete">Remove</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>#3</td>
-                                <td>Prof. Minerva McGonagall</td>
-                                <td>mcgonagall@hogwarts.edu</td>
-                                <td>2</td>
-                                <td>32</td>
-                                <td><span class="badge active">Active</span></td>
-                                <td>
-                                    <button class="btn-action show">View</button>
-                                    <button class="btn-action edit">Edit</button>
-                                    <button class="btn-action delete">Remove</button>
-                                </td>
-                            </tr>
+                            <?php foreach ($Professors as $prof): ?>
+                                <tr>
+                                    <td><?php echo $prof['professor_id']; ?></td>
+                                    <td><?php echo $prof['professor_name']; ?></td>
+                                    <td><?php echo $prof['email']; ?></td>
+                                    <td><?php echo $prof['courses_count']; ?></td>
+                                    <td><?php echo $prof['students_count']; ?></td>
+                                    <td><span class="badge active">Active</span></td>
+                                    <td>
+                                        <a href="/show-professor?id=<?php echo $prof['professor_id']; ?>" class="btn-action show">View</a>
+                                        <a href="/edit-professor?id=<?php echo $prof['professor_id']; ?>" class="btn-action edit">Edit</a>
+                                        <a href="/delete-professor?id=<?php echo $prof['professor_id']; ?>" class="btn-action delete">Delete</a>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
                         </tbody>
                     </table>
                 </div>
@@ -339,19 +296,25 @@ include(base_path('views/partials/header.view.php'));
                     <h4 class="form-title">
                         <i class="fa-solid fa-user-plus"></i> Add New Professor
                     </h4>
-                    <form class="enroll-form">
+                    <form method="POST" action="/store-professor" class="enroll-form">
                         <div class="form-row">
                             <div class="form-group">
                                 <label>Full Name</label>
-                                <input type="text" class="form-control" placeholder="Enter professor name">
+                                <input type="text" name="user_name" class="form-control" placeholder="Enter professor name" required>
                             </div>
                             <div class="form-group">
                                 <label>Email Address</label>
-                                <input type="email" class="form-control" placeholder="Enter email">
+                                <input type="email" name="email" class="form-control" placeholder="Enter email" required>
                             </div>
                             <div class="form-group">
                                 <label>Password</label>
-                                <input type="password" class="form-control" placeholder="Enter password">
+                                <input type="password" name="password" class="form-control" placeholder="Enter password" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Professor Display Name</label>
+                                <input type="text" name="professor_name" class="form-control" placeholder="Professor name" required>
                             </div>
                         </div>
                         <button type="submit" class="btn btn-submit">
@@ -370,19 +333,19 @@ include(base_path('views/partials/header.view.php'));
                 <!-- Course Stats -->
                 <div class="stats-grid">
                     <div class="stat-card">
-                        <div class="stat-icon courses">8</div>
+                        <div class="stat-icon courses"><?php echo $stats['total_courses']; ?></div>
                         <p class="stat-label">Total Courses</p>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-icon active">8</div>
+                        <div class="stat-icon active"><?php echo $stats['total_courses']; ?></div>
                         <p class="stat-label">Active Courses</p>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-icon enrolled">156</div>
+                        <div class="stat-icon enrolled"><?php echo $stats['total_enrollments']; ?></div>
                         <p class="stat-label">Total Enrollments</p>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-icon quizzes">23</div>
+                        <div class="stat-icon quizzes"><?php echo $stats['total_assignments']; ?></div>
                         <p class="stat-label">Assignments</p>
                     </div>
                 </div>
@@ -397,50 +360,28 @@ include(base_path('views/partials/header.view.php'));
                                 <th>Professor</th>
                                 <th>Enrolled Students</th>
                                 <th>Assignments</th>
+                                <th>Submissions</th>
                                 <th>Status</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>#1</td>
-                                <td>Defense Against the Dark Arts</td>
-                                <td>Prof. Severus Snape</td>
-                                <td>28</td>
-                                <td>5</td>
-                                <td><span class="badge active">Active</span></td>
-                                <td>
-                                    <button class="btn-action show">View</button>
-                                    <button class="btn-action edit">Edit</button>
-                                    <button class="btn-action delete">Archive</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>#2</td>
-                                <td>Transfiguration</td>
-                                <td>Prof. Minerva McGonagall</td>
-                                <td>32</td>
-                                <td>4</td>
-                                <td><span class="badge active">Active</span></td>
-                                <td>
-                                    <button class="btn-action show">View</button>
-                                    <button class="btn-action edit">Edit</button>
-                                    <button class="btn-action delete">Archive</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>#3</td>
-                                <td>Herbology</td>
-                                <td>Prof. Pomona Sprout</td>
-                                <td>25</td>
-                                <td>3</td>
-                                <td><span class="badge active">Active</span></td>
-                                <td>
-                                    <button class="btn-action show">View</button>
-                                    <button class="btn-action edit">Edit</button>
-                                    <button class="btn-action delete">Archive</button>
-                                </td>
-                            </tr>
+                            <?php foreach ($Courses as $course): ?>
+                                <tr>
+                                    <td><?php echo $course['course_id']; ?></td>
+                                    <td><?php echo $course['course_name']; ?></td>
+                                    <td><?php echo $course['professor_name']; ?></td>
+                                    <td><?php echo $course['enrolled_count']; ?></td>
+                                    <td><?php echo $course['assignments_count']; ?></td>
+                                    <td><?php echo $course['submissions_count']; ?></td>
+                                    <td><span class="badge active">Active</span></td>
+                                    <td>
+                                        <a href="/show-course?id=<?php echo $course['course_id']; ?>" class="btn-action show">View</a>
+                                        <a href="/edit-course?id=<?php echo $course['course_id']; ?>" class="btn-action edit">Edit</a>
+                                        <a href="/delete-course?id=<?php echo $course['course_id']; ?>" class="btn-action delete">Delete</a>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
                         </tbody>
                     </table>
                 </div>
@@ -450,19 +391,19 @@ include(base_path('views/partials/header.view.php'));
                     <h4 class="form-title">
                         <i class="fa-solid fa-plus"></i> Add New Course
                     </h4>
-                    <form class="enroll-form">
+                    <form method="POST" action="/store-course" class="enroll-form">
                         <div class="form-row">
                             <div class="form-group">
                                 <label>Course Name</label>
-                                <input type="text" class="form-control" placeholder="Enter course name">
+                                <input type="text" name="course_name" class="form-control" placeholder="Enter course name" required>
                             </div>
                             <div class="form-group">
                                 <label>Professor</label>
-                                <select class="form-control">
-                                    <option>Prof. Severus Snape</option>
-                                    <option>Prof. Minerva McGonagall</option>
-                                    <option>Prof. Pomona Sprout</option>
-                                    <option>Prof. Filius Flitwick</option>
+                                <select name="professor_id" class="form-control" required>
+                                    <option value="">Select Professor</option>
+                                    <?php foreach ($Professors as $prof): ?>
+                                        <option value="<?php echo $prof['professor_id']; ?>"><?php echo $prof['professor_name']; ?></option>
+                                    <?php endforeach; ?>
                                 </select>
                             </div>
                         </div>
@@ -482,19 +423,19 @@ include(base_path('views/partials/header.view.php'));
                 <!-- Quiz Stats -->
                 <div class="stats-grid">
                     <div class="stat-card">
-                        <div class="stat-icon quizzes">23</div>
+                        <div class="stat-icon quizzes"><?php echo $stats['total_quizzes']; ?></div>
                         <p class="stat-label">Total Quizzes</p>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-icon active">18</div>
+                        <div class="stat-icon active"><?php echo $stats['active_quizzes']; ?></div>
                         <p class="stat-label">Active Quizzes</p>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-icon submissions">156</div>
+                        <div class="stat-icon submissions"><?php echo $stats['total_submissions']; ?></div>
                         <p class="stat-label">Total Submissions</p>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-icon points">2,340</div>
+                        <div class="stat-icon points"><?php echo number_format($stats['points_awarded']); ?></div>
                         <p class="stat-label">Points Awarded</p>
                     </div>
                 </div>
@@ -515,48 +456,24 @@ include(base_path('views/partials/header.view.php'));
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>#1</td>
-                                <td>Basic Defense Spells</td>
-                                <td>Defense Against the Dark Arts</td>
-                                <td>Prof. Snape</td>
-                                <td>100</td>
-                                <td>2025-05-15</td>
-                                <td>28/28</td>
-                                <td>
-                                    <button class="btn-action show">View</button>
-                                    <button class="btn-action edit">Edit</button>
-                                    <button class="btn-action delete">Delete</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>#2</td>
-                                <td>Transfiguration Theory</td>
-                                <td>Transfiguration</td>
-                                <td>Prof. McGonagall</td>
-                                <td>100</td>
-                                <td>2025-05-20</td>
-                                <td>30/32</td>
-                                <td>
-                                    <button class="btn-action show">View</button>
-                                    <button class="btn-action edit">Edit</button>
-                                    <button class="btn-action delete">Delete</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>#3</td>
-                                <td>Magical Herbs Quiz</td>
-                                <td>Herbology</td>
-                                <td>Prof. Sprout</td>
-                                <td>50</td>
-                                <td>2025-05-10</td>
-                                <td>25/25</td>
-                                <td>
-                                    <button class="btn-action show">View</button>
-                                    <button class="btn-action edit">Edit</button>
-                                    <button class="btn-action delete">Delete</button>
-                                </td>
-                            </tr>
+                            <?php foreach ($Assignments as $assign): 
+                                if ($assign['assignment_type'] === 'Quiz'): ?>
+                                <tr>
+                                    <td><?php echo $assign['assignment_id']; ?></td>
+                                    <td><?php echo $assign['title']; ?></td>
+                                    <td><?php echo $assign['course_name']; ?></td>
+                                    <td><?php echo $assign['professor_name']; ?></td>
+                                    <td><?php echo $assign['max_points']; ?></td>
+                                    <td><?php echo date('Y-m-d', strtotime($assign['deadline'])); ?></td>
+	                                    <td><?php echo $assign['submission_count']; ?></td>
+                                    <td>
+                                        <a href="/show-assignment?id=<?php echo $assign['assignment_id']; ?>" class="btn-action show">View</a>
+                                        <a href="/edit-assignment?id=<?php echo $assign['assignment_id']; ?>" class="btn-action edit">Edit</a>
+                                        <a href="/delete-assignment?id=<?php echo $assign['assignment_id']; ?>" class="btn-action delete">Delete</a>
+                                    </td>
+                                </tr>
+                            <?php endif; 
+                            endforeach; ?>
                         </tbody>
                     </table>
                 </div>
@@ -566,30 +483,31 @@ include(base_path('views/partials/header.view.php'));
                     <h4 class="form-title">
                         <i class="fa-solid fa-plus"></i> Create New Quiz
                     </h4>
-                    <form class="enroll-form">
+                    <form method="POST" action="/store-assignment" class="enroll-form">
+                        <input type="hidden" name="assignment_type" value="Quiz">
                         <div class="form-row">
                             <div class="form-group">
                                 <label>Quiz Title</label>
-                                <input type="text" class="form-control" placeholder="Enter quiz title">
+                                <input type="text" name="title" class="form-control" placeholder="Enter quiz title" required>
                             </div>
                             <div class="form-group">
                                 <label>Course</label>
-                                <select class="form-control">
-                                    <option>Defense Against the Dark Arts</option>
-                                    <option>Transfiguration</option>
-                                    <option>Herbology</option>
-                                    <option>Potions</option>
+                                <select name="course_id" class="form-control" required>
+                                    <option value="">Select Course</option>
+                                    <?php foreach ($Courses as $course): ?>
+                                        <option value="<?php echo $course['course_id']; ?>"><?php echo $course['course_name']; ?></option>
+                                    <?php endforeach; ?>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label>Max Points</label>
-                                <input type="number" class="form-control" placeholder="100" value="100">
+                                <input type="number" name="max_points" class="form-control" placeholder="100" value="100" required>
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group">
                                 <label>Deadline</label>
-                                <input type="datetime-local" class="form-control">
+                                <input type="datetime-local" name="deadline" class="form-control" required>
                             </div>
                             <div class="form-group">
                                 <label>Description</label>
@@ -612,19 +530,23 @@ include(base_path('views/partials/header.view.php'));
                 <!-- Assignment Stats -->
                 <div class="stats-grid">
                     <div class="stat-card">
-                        <div class="stat-icon quizzes">45</div>
+                        <div class="stat-icon quizzes"><?php echo $stats['total_assignments']; ?></div>
                         <p class="stat-label">Total Assignments</p>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-icon active">28</div>
+                        <div class="stat-icon active"><?php echo $stats['total_quizzes']; ?></div>
                         <p class="stat-label">Quizzes</p>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-icon submissions">17</div>
+                        <div class="stat-icon submissions"><?php echo $stats['total_tasks']; ?></div>
                         <p class="stat-label">Tasks</p>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-icon points">8</div>
+                        <div class="stat-icon submissions"><?php echo $stats['total_submissions']; ?></div>
+                        <p class="stat-label">Total Submissions</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon points"><?php echo $stats['upcoming_deadlines']; ?></div>
                         <p class="stat-label">Upcoming Deadlines</p>
                     </div>
                 </div>
@@ -641,52 +563,28 @@ include(base_path('views/partials/header.view.php'));
                                 <th>Max Points</th>
                                 <th>Deadline</th>
                                 <th>Created</th>
+                                <th>Submissions</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>#1001</td>
-                                <td>Brewing Basics Quiz</td>
-                                <td><span class="badge badge-quiz">Quiz</span></td>
-                                <td>Potions 101</td>
-                                <td>100</td>
-                                <td>2025-05-15</td>
-                                <td>2025-05-01</td>
-                                <td>
-                                    <button class="btn-action show">View</button>
-                                    <button class="btn-action edit">Edit</button>
-                                    <button class="btn-action delete">Delete</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>#1002</td>
-                                <td>Matchstick to Needle</td>
-                                <td><span class="badge badge-task">Task</span></td>
-                                <td>Transfiguration 301</td>
-                                <td>50</td>
-                                <td>2025-05-20</td>
-                                <td>2025-05-02</td>
-                                <td>
-                                    <button class="btn-action show">View</button>
-                                    <button class="btn-action edit">Edit</button>
-                                    <button class="btn-action delete">Delete</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>#1003</td>
-                                <td>Defense Spells Quiz</td>
-                                <td><span class="badge badge-quiz">Quiz</span></td>
-                                <td>Defense Against Dark Arts</td>
-                                <td>100</td>
-                                <td>2025-05-18</td>
-                                <td>2025-05-03</td>
-                                <td>
-                                    <button class="btn-action show">View</button>
-                                    <button class="btn-action edit">Edit</button>
-                                    <button class="btn-action delete">Delete</button>
-                                </td>
-                            </tr>
+                            <?php foreach ($Assignments as $assign): ?>
+                                <tr>
+                                    <td><?php echo $assign['assignment_id']; ?></td>
+                                    <td><?php echo $assign['title']; ?></td>
+                                    <td><span class="badge badge-<?php echo strtolower($assign['assignment_type']); ?>"><?php echo $assign['assignment_type']; ?></span></td>
+                                    <td><?php echo $assign['course_name']; ?></td>
+                                    <td><?php echo $assign['max_points']; ?></td>
+                                    <td><?php echo date('Y-m-d', strtotime($assign['deadline'])); ?></td>
+                                    <td><?php echo date('Y-m-d', strtotime($assign['created_at'])); ?></td>
+                                    <td><?php echo $assign['submission_count']; ?></td>
+                                    <td>
+                                        <a href="/show-assignment?id=<?php echo $assign['assignment_id']; ?>" class="btn-action show">View</a>
+                                        <a href="/edit-assignment?id=<?php echo $assign['assignment_id']; ?>" class="btn-action edit">Edit</a>
+                                        <a href="/delete-assignment?id=<?php echo $assign['assignment_id']; ?>" class="btn-action delete">Delete</a>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
                         </tbody>
                     </table>
                 </div>
@@ -696,15 +594,15 @@ include(base_path('views/partials/header.view.php'));
                     <h4 class="form-title">
                         <i class="fa-solid fa-plus"></i> Create New Assignment
                     </h4>
-                    <form class="enroll-form">
+                    <form method="POST" action="/store-assignment" class="enroll-form">
                         <div class="form-row">
                             <div class="form-group">
                                 <label>Assignment Title</label>
-                                <input type="text" class="form-control" placeholder="Enter assignment title" required>
+                                <input type="text" name="title" class="form-control" placeholder="Enter assignment title" required>
                             </div>
                             <div class="form-group">
                                 <label>Type</label>
-                                <select class="form-control" required>
+                                <select name="assignment_type" class="form-control" required>
                                     <option value="">Select Type...</option>
                                     <option value="Quiz">Quiz</option>
                                     <option value="Task">Task</option>
@@ -712,23 +610,23 @@ include(base_path('views/partials/header.view.php'));
                             </div>
                             <div class="form-group">
                                 <label>Course</label>
-                                <select class="form-control" required>
-                                    <option>Potions 101</option>
-                                    <option>Transfiguration 301</option>
-                                    <option>Defense Against Dark Arts</option>
-                                    <option>Charms 201</option>
+                                <select name="course_id" class="form-control" required>
+                                    <option value="">Select Course</option>
+                                    <?php foreach ($Courses as $course): ?>
+                                        <option value="<?php echo $course['course_id']; ?>"><?php echo $course['course_name']; ?></option>
+                                    <?php endforeach; ?>
                                 </select>
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group">
                                 <label>Max Points</label>
-                                <input type="number" class="form-control" placeholder="100" value="100" min="1"
+                                <input type="number" name="max_points" class="form-control" placeholder="100" value="100" min="1"
                                     required>
                             </div>
                             <div class="form-group">
                                 <label>Deadline</label>
-                                <input type="datetime-local" class="form-control" required>
+                                <input type="datetime-local" name="deadline" class="form-control" required>
                             </div>
                             <div class="form-group">
                                 <label>Description</label>
@@ -747,47 +645,52 @@ include(base_path('views/partials/header.view.php'));
 </div>
 
 <script>
-function showSection(sectionName) {
-    const sections = document.querySelectorAll('.dashboard-section');
-    sections.forEach(section => section.classList.remove('active'));
+    function showSection(sectionName) {
+        const sections = document.querySelectorAll('.dashboard-section');
+        sections.forEach(section => section.classList.remove('active'));
 
-    const sidebarLinks = document.querySelectorAll('.sidebar-link');
-    sidebarLinks.forEach(link => link.classList.remove('active'));
+        const sidebarLinks = document.querySelectorAll('.sidebar-link');
+        sidebarLinks.forEach(link => link.classList.remove('active'));
 
-    const targetSection = document.getElementById(sectionName + '-section');
-    if (targetSection) {
-        targetSection.classList.add('active');
+        const targetSection = document.getElementById(sectionName + '-section');
+        if (targetSection) {
+            targetSection.classList.add('active');
+        }
+
+        const targetLink = document.querySelector(`[data-section="${sectionName}"]`);
+        if (targetLink) {
+            targetLink.classList.add('active');
+        }
+
+        const titles = {
+            'dashboard': 'Dashboard Overview',
+            'students': 'Students Management',
+            'professors': 'Professors Management',
+            'courses': 'Courses Management',
+            'quizzes': 'Quizzes Management',
+            'assignments': 'Assignments Management'
+        };
+        document.getElementById('page-title').textContent = titles[sectionName] || 'Dashboard';
     }
 
-    const targetLink = document.querySelector(`[data-section="${sectionName}"]`);
-    if (targetLink) {
-        targetLink.classList.add('active');
-    }
-
-    const titles = {
-        'dashboard': 'Dashboard Overview',
-        'students': 'Students Management',
-        'professors': 'Professors Management',
-        'courses': 'Courses Management',
-        'quizzes': 'Quizzes Management',
-        'assignments': 'Assignments Management'
-    };
-    document.getElementById('page-title').textContent = titles[sectionName] || 'Dashboard';
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    const sidebarLinks = document.querySelectorAll('.sidebar-link');
-    sidebarLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            const section = this.getAttribute('data-section');
-            if (!section) {
-                return;
-            }
-            e.preventDefault();
-            showSection(section);
+    document.addEventListener('DOMContentLoaded', function() {
+        const sidebarLinks = document.querySelectorAll('.sidebar-link');
+        sidebarLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                const section = this.getAttribute('data-section');
+                if (!section) {
+                    return;
+                }
+                e.preventDefault();
+                showSection(section);
+            });
         });
+
+        const initialSection = window.location.hash.replace('#', '');
+        if (initialSection) {
+            showSection(initialSection);
+        }
     });
-});
 </script>
 
 <?php

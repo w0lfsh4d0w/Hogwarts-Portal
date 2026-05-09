@@ -397,11 +397,19 @@ if ($request === '/dashboard') {
             <span>Services</span>
           </a>
 
-          <!-- Dashboard Link -->
-          <a class="nav-link magical-link dashboard-link" href="/dashboard">
-            <i class="fa-solid fa-chart-line me-1"></i>
-            <span>Dashboard</span>
-          </a>
+          <?php if (($_SESSION['user']['role'] ?? null) === 'Dumbledore'): ?>
+            <a class="nav-link magical-link dashboard-link" href="/dashboard">
+              <i class="fa-solid fa-chart-line me-1"></i>
+              <span>Dumbledore Panel</span>
+            </a>
+          <?php endif; ?>
+
+          <?php if (($_SESSION['user']['role'] ?? null) === 'Student'): ?>
+            <a class="nav-link magical-link" href="/student-panel">
+              <i class="fa-solid fa-user-graduate me-1"></i>
+              <span>Student Panel</span>
+            </a>
+          <?php endif; ?>
         </div>
 
         <!-- Auth Section -->

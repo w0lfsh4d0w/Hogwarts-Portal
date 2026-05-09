@@ -1,0 +1,92 @@
+<?php
+include(base_path('views/partials/header.view.php'));
+?>
+
+<div class="dashboard-container">
+    <div class="main-content">
+        <div class="top-bar">
+            <h2 id="page-title">Assignment Details</h2>
+            <div class="top-bar-actions">
+                <a href="/dashboard" class="btn btn-bronze">Back to Dashboard</a>
+            </div>
+        </div>
+
+        <div class="dashboard-content">
+            <section class="dashboard-section active">
+                <h3 class="section-title"><?php echo $assignment['title']; ?></h3>
+
+                <div class="student-details">
+                    <div class="detail-row">
+                        <label>Assignment ID:</label>
+                        <span><?php echo $assignment['assignment_id']; ?></span>
+                    </div>
+                    <div class="detail-row">
+                        <label>Type:</label>
+                        <span><span class="badge badge-<?php echo strtolower($assignment['assignment_type']); ?>"><?php echo $assignment['assignment_type']; ?></span></span>
+                    </div>
+                    <div class="detail-row">
+                        <label>Course:</label>
+                        <span><?php echo $assignment['course_name']; ?></span>
+                    </div>
+                    <div class="detail-row">
+                        <label>Professor:</label>
+                        <span><?php echo $assignment['professor_name']; ?></span>
+                    </div>
+                    <div class="detail-row">
+                        <label>Max Points:</label>
+                        <span><?php echo $assignment['max_points']; ?></span>
+                    </div>
+                    <div class="detail-row">
+                        <label>Deadline:</label>
+                        <span><?php echo date('Y-m-d H:i', strtotime($assignment['deadline'])); ?></span>
+                    </div>
+                    <div class="detail-row">
+                        <label>Created:</label>
+                        <span><?php echo date('Y-m-d H:i', strtotime($assignment['created_at'])); ?></span>
+                    </div>
+                    <div class="detail-row">
+                        <label>Total Submissions:</label>
+                        <span><?php echo $assignment['submission_count']; ?></span>
+                    </div>
+                </div>
+
+                <?php if (count($submissions) > 0): ?>
+                    <h4 style="margin-top: 30px; margin-bottom: 15px;">Student Submissions</h4>
+                    <table class="dashboard-table">
+                        <thead>
+                            <tr>
+                                <th>Student Name</th>
+                                <th>Score</th>
+                                <th>Submitted At</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($submissions as $sub): ?>
+                                <tr>
+                                    <td><?php echo $sub['user_name']; ?></td>
+                                    <td><?php echo $sub['score']; ?>/<?php echo $assignment['max_points']; ?></td>
+                                    <td><?php echo date('Y-m-d H:i', strtotime($sub['submitted_at'])); ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                <?php else: ?>
+                    <p style="margin-top: 20px; color: #666;">No submissions yet.</p>
+                <?php endif; ?>
+
+                <div class="action-buttons" style="margin-top: 30px;">
+                    <a href="/edit-assignment?id=<?php echo $assignment['assignment_id']; ?>" class="btn btn-submit">
+                        <i class="fa-solid fa-edit"></i> Edit Assignment
+                    </a>
+                    <a href="/delete-assignment?id=<?php echo $assignment['assignment_id']; ?>" class="btn btn-danger" style="background-color: #d32f2f; margin-left: 10px;">
+                        <i class="fa-solid fa-trash"></i> Delete Assignment
+                    </a>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+
+<?php
+include(base_path('views/partials/footer.view.php'));
+?>

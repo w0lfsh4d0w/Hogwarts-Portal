@@ -11,6 +11,14 @@ $signedIn = (new Authenticator)->attempt($attributes['email'], $attributes['pass
 if (!$signedIn) {
     $form->error('email', 'No matching password found for that email address.')->throw();
     }
-    
-    
-    redirect('/');
+$user = $_SESSION['user'] ?? [];
+
+if (($user['role'] ?? null) === 'Dumbledore') {
+    redirect('/dashboard');
+}
+
+if (($user['role'] ?? null) === 'Student') {
+    redirect('/student-panel');
+}
+
+redirect('/');

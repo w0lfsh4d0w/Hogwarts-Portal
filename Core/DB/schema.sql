@@ -283,6 +283,10 @@ INSERT INTO User (user_name, email, password, role) VALUES
 INSERT INTO Professor (user_id, professor_name) VALUES
 (6, 'Prof. Severus Snape');
 
+-- Dumbledore Super Admin
+INSERT INTO User (user_name, email, password, role) VALUES
+('Albus Percival Wulfric Brian Dumbledore', 'dumbledore@hogwarts.edu', '$2y$10$C4mDW1y.tOD4kiZsJibVMe9/KKY0DtSqvFtAAB/mmn4xSGhpRzPs2', 'Dumbledore');
+
 -- Course
 INSERT INTO Course (course_name, professor_id) VALUES
 ('Defense Against the Dark Arts', 1),
