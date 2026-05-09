@@ -10,6 +10,9 @@
 $router->get('/', 'HomeController@index');
 
 $router->get('/shop', 'ShopController@index');
+
 $router->post('/shop/buy', 'ShopController@buy');
 
 $router->get('/inventory', 'InventoryController@index');
+
+$router->post('/inventory/remove', 'InventoryController@remove');

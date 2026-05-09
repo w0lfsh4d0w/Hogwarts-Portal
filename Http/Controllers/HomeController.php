@@ -1,5 +1,4 @@
-<!-- php -S localhost:8888 -->
 <?php
 
-
+namespace Http\Controllers;
 return view('home.view.php' );

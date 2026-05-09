@@ -11,6 +11,8 @@ $db = App::resolve(Database::class);
 $email = $_POST['email'];
 $password = $_POST['password'];
 
+$_SESSION['student_id'] = 1;
+
 $errors = [];
 
 if (!Validator::email($email)) {

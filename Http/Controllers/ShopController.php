@@ -1,40 +1,99 @@
 <?php
 
-namespace Controllers;
+namespace Http\Controllers;
+
+use Core\App;
 
 class ShopController
 {
-    private function items()
-    {
-        return [
-            ['id' => 1, 'name' => 'Holly Wand', 'category' => 'wand', 'price' => 100],
-            ['id' => 2, 'name' => 'Dragon Heart Potion', 'category' => 'potion', 'price' => 50],
-            ['id' => 3, 'name' => 'Ancient Spell Book', 'category' => 'book', 'price' => 200],
-        ];
-    }
-
     public function index()
     {
+        $db = App::resolve('Core\Database');
+
+        $items = $db->query("
+            SELECT * FROM DiagonAlleyShop
+        ")->get();
+
         return view('shop.view.php', [
-            'items' => $this->items()
+            'items' => $items
         ]);
     }
 
     public function buy()
     {
-        $itemId = $_POST['item_id'];
+        $db = App::resolve('Core\Database');
 
-        if (!isset($_SESSION['inventory'])) {
-            $_SESSION['inventory'] = [];
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header("Location: /shop");
+            exit();
         }
 
-        if (!isset($_SESSION['inventory'][$itemId])) {
-            $_SESSION['inventory'][$itemId] = 1;
+        $studentId = $_SESSION['student_id'] ?? 1;
+        $itemId = $_POST['item_id'] ?? null;
+
+        if (!$itemId) {
+            header("Location: /shop");
+            exit();
+        }
+
+        $item = $db->query("
+        SELECT * FROM DiagonAlleyShop
+        WHERE item_id = :id
+    ", ['id' => $itemId])->find();
+
+        $student = $db->query("
+        SELECT * FROM Student
+        WHERE student_id = :id
+    ", ['id' => $studentId])->find();
+
+        if (!$item || !$student) {
+            header("Location: /shop");
+            exit();
+        }
+
+        if ($student['balance'] < $item['item_price']) {
+            $_SESSION['error'] = "Not enough balance!";
+            header("Location: /shop");
+            exit();
+        }
+
+        $db->query("
+        UPDATE Student
+        SET balance = balance - :price
+        WHERE student_id = :id
+    ", [
+            'price' => $item['item_price'],
+            'id' => $studentId
+        ]);
+
+        $inventory = $db->query("
+        SELECT * FROM Inventory
+        WHERE student_id = :sid AND item_id = :iid
+    ", [
+            'sid' => $studentId,
+            'iid' => $itemId
+        ])->find();
+
+        if ($inventory) {
+            $db->query("
+            UPDATE Inventory
+            SET quantity = quantity + 1
+            WHERE student_id = :sid AND item_id = :iid
+        ", [
+                'sid' => $studentId,
+                'iid' => $itemId
+            ]);
         } else {
-            $_SESSION['inventory'][$itemId]++;
+            $db->query("
+            INSERT INTO Inventory (student_id, item_id, quantity)
+            VALUES (:sid, :iid, 1)
+        ", [
+                'sid' => $studentId,
+                'iid' => $itemId
+            ]);
         }
 
-        header('Location: /shop');
+        header("Location: /inventory");
         exit();
     }
 }
