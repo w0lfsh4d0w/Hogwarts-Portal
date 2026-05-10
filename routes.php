@@ -7,15 +7,14 @@
 // $router->delete('uri', 'controller')->only('auth');
 
 
-$router->get('/', 'HomeController@index');
 
-$router->get('/shop', 'ShopController@index');
+ $router->get('/shop', 'ShopController.php');
 
-$router->post('/shop/buy', 'ShopController@buy');
+// $router->post('/shop/buy', 'ShopController@buy');
 
-$router->get('/inventory', 'InventoryController@index');
+// $router->get('/inventory', 'InventoryController@index');
 
-$router->post('/inventory/remove', 'InventoryController@remove');
+// $router->post('/inventory/remove', 'InventoryController@remove');
 $router->get('/register', 'registration/create.php')->only('guest');
 $router->post('/register', 'registration/store.php')->only('guest');
 $router->delete('/logout', 'session/destroy.php')->only('auth');
