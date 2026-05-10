@@ -1,20 +1,17 @@
 <?php
 
 namespace Core;
-
+use Http\Models\UserModel ;
 class Authenticator
 {
     public function attempt($email, $password)
     {
-        $user = App::resolve(Database::class)->query("SELECT * FROM users WHERE email = :email", [
-            ':email' => $email
-        ])->find();
+        $userModel = new UserModel();
+        $user = $userModel->FindUser($email);
 
         if ($user) {
             if (password_verify($password, $user['password'])) {
-                $this->login([
-                    'email' => $user['email']
-                ]);
+                $this->login($user);
                 return true;
             }
         }
@@ -24,7 +21,11 @@ class Authenticator
     public function login($user)
     {
         $_SESSION['user'] = [
-            'email' => $user['email']
+            'user_id'    => $user['user_id'],
+            'student_id' => $user['student_id'],
+            'email'      => $user['email'],
+            'role'       => $user['role'],
+            'house_id'   => $user['house_id']
         ];
 
         session_regenerate_id(true);

@@ -14,10 +14,13 @@
                 <a class="nav-link" href="#services">Dashboard</a>
 
                 <?php if (isset($_SESSION['user'])): ?>
-                    <a class="nav-link logout me-5" href="/logout">Logout</a>
+                    <form action="/logout" method="POST">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <button type="submit" class="nav-link logout me-5">Logout</button>
+                    </form>
                 <?php else: ?>
-                    <a class="nav-link register me-5" href="#">Registe/ Login</a>
-                <?php endif; ?>
+                    <a class="nav-link register me-5" href="/register">Register</a>
+                    <a class="nav-link register me-5" href="/login">Login</a> <?php endif; ?>
             </div>
         </div>
     </div>

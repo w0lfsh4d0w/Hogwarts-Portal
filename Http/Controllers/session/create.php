@@ -2,7 +2,7 @@
 
 use Core\Session;
 
-view("path", [
-    'key' => "value",
-    'errors' => Session::get('errors')
+view('session/create', [
+    'errors' => Session::get('errors') ?? [],
+    'old'    => Session::get('old') ?? []    
 ]);

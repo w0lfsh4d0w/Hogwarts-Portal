@@ -33,8 +33,7 @@ function authorize($condition, $status = Response::FORBIDDEN)
 function view($path, $attributes = [])
 {
     extract($attributes);
-
-    require __DIR__ . "/../views/" . $path;
+    require base_path('views/' . $path . '.view.php');
 }
 
 function redirect($path)
