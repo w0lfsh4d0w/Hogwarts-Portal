@@ -28,4 +28,6 @@ class UserModel
 return $this->db->connection->lastInsertId();
 
     }
+
+
 }
