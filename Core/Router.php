@@ -2,60 +2,78 @@
 
 namespace Core;
 
+use Core\Middleware\Middleware;
+
 class Router
 {
     protected $routes = [];
-
-    public function get($uri, $controller)
-    {
-        $this->add('GET', $uri, $controller);
-    }
-
-    public function post($uri, $controller)
-    {
-        $this->add('POST', $uri, $controller);
-    }
 
     public function add($method, $uri, $controller)
     {
         $this->routes[] = [
             'uri' => $uri,
-            'method' => $method,
-            'controller' => $controller
+            'controller' => $controller,
+            'method' => strtoupper($method),
+            'middleware' => null
         ];
+        return $this;
+    }
+
+
+    public function get($uri, $controller)
+    {
+        return $this->add('GET', $uri, $controller);
+    }
+
+
+    public function post($uri, $controller)
+    {
+        return $this->add('POST', $uri, $controller);
+    }
+
+    public function put($uri, $controller)
+    {
+        $this->add('PUT', $uri, $controller);
+    }
+
+    public function delete($uri, $controller)
+    {
+        return $this->add('DELETE', $uri, $controller);
+    }
+
+    public function patch($uri, $controller)
+    {
+        return $this->add('PATCH', $uri, $controller);
+    }
+
+    public function only($type)
+    {
+        $this->routes[array_key_last($this->routes)]['middleware'] = $type;
+        return $this;
     }
 
     public function route($uri, $method)
     {
         foreach ($this->routes as $route) {
-
             if ($route['uri'] === $uri && $route['method'] === strtoupper($method)) {
-                return $this->callAction($route['controller']);
+                // applay the middleware
+            Middleware::resolve($route['middleware']);
+                return require base_path('Http/controllers/' . $route['controller']);
             }
         }
 
         $this->abort();
     }
 
-    protected function callAction($controller)
+    public function previousUrl()
     {
-        [$class, $action] = explode('@', $controller);
-
-        $class = "Http\\Controllers\\$class";
-
-        return (new $class)->$action();
-    }
+        return $_SERVER['HTTP_REFERER'];
+    }   
 
     protected function abort($code = 404)
     {
         http_response_code($code);
-
-        $path = BASE_PATH . "views/{$code}.view.php";
-
-        if (file_exists($path)) {
-            require $path;
-        }
-
+        require base_path("views/{$code}.php");
         die();
     }
 }
