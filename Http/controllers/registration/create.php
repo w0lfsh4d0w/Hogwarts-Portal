@@ -1,5 +1,8 @@
 <?php
 
+use Core\Session;
+
 view("registration/create", [
-    'key' => 'value'
+    'errors' => Session::get('errors') ?? [],
+    'old'    => Session::get('old') ?? []
 ]);

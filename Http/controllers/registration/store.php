@@ -7,6 +7,7 @@ use Core\Validator;
 use Http\Models\HouseModel;
 use Http\Models\StudentModel;
 use Core\Authenticator;
+use Core\Session;
 
 $db = App::resolve(Database::class);
 $name = $_POST['name'];
@@ -30,21 +31,19 @@ if ($password != $password_confirmation) {
 };
 
 if (!empty($errors)) {
-    return view('registration/create', [
-        'errors' => $errors,
-        'old'    => ['name' => $name, 'email' => $email]  // so fields don't clear on error
-    ]);
+    Session::flash('errors', $errors);
+    Session::flash('old', ['name' => $name, 'email' => $email]);
+    redirect('/register');
+    exit();
 }
 
 $user = new  UserModel();
 $existingUser = $user->FindUser($email);
 if ($existingUser) {
-    // is user alrady exist 
-    $errors['email'] = 'Email already taken.';
-    return view('registration/create', [
-        'errors' => $errors,
-        'old'    => ['name' => $name, 'email' => $email]  // so fields don't clear on error
-    ]);
+    Session::flash('errors', ['email' => 'Email already taken.']);
+    Session::flash('old', ['name' => $name, 'email' => $email]);
+    redirect('/register');
+    exit();
 } else {
     $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
     $userId = $user->CreateUser($name, $email, $hashedPassword);
