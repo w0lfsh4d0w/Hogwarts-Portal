@@ -10,9 +10,6 @@
         <h1 class="text-center text-warning mb-3 page-title">
             <i class="fa-solid fa-box-open me-2"></i> Your Inventory
         </h1>
-        <h1 class="text-center text-warning mb-3 page-title">
-            <i class="fa-solid fa-box-open me-2"></i> Your Inventory
-        </h1>
 
         <?php if (isset($success)): ?>
             <div class="alert alert-success text-center rounded-pill mx-auto mb-4" style="max-width: 500px;">
