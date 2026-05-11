@@ -1,13 +1,15 @@
 <?php
 
 namespace Core;
-use Http\Models\UserModel ;
+
+use Http\Models\UserModel;
+
 class Authenticator
 {
     public function attempt($email, $password)
     {
         $userModel = new UserModel();
-        $user = $userModel->FindUser($email);
+        $user = $userModel->findUserWithStudent($email);
 
         if ($user) {
             if (password_verify($password, $user['password'])) {
