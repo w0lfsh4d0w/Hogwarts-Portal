@@ -7,27 +7,27 @@
             <h3 class="sidebar-title">Hogwarts</h3>
         </div>
         <nav class="sidebar-nav">
-            <a href="/dashboard" class="sidebar-link" data-section="dashboard">
+            <a href="/dashboard#dashboard" class="sidebar-link" data-section="dashboard">
                 <i class="fa-solid fa-chart-line"></i>
                 <span>Dashboard</span>
             </a>
-            <a href="/dashboard" class="sidebar-link" data-section="students">
+            <a href="/dashboard#students" class="sidebar-link" data-section="students">
                 <i class="fa-solid fa-users"></i>
                 <span>Students</span>
             </a>
-            <a href="/dashboard" class="sidebar-link" data-section="professors">
+            <a href="/dashboard#professors" class="sidebar-link" data-section="professors">
                 <i class="fa-solid fa-chalkboard-user"></i>
                 <span>Professors</span>
             </a>
-            <a href="/dashboard" class="sidebar-link" data-section="courses">
+            <a href="/dashboard#courses" class="sidebar-link" data-section="courses">
                 <i class="fa-solid fa-book"></i>
                 <span>Courses</span>
             </a>
-            <a href="/dashboard" class="sidebar-link" data-section="quizzes">
+            <a href="/dashboard#quizzes" class="sidebar-link" data-section="quizzes">
                 <i class="fa-solid fa-question"></i>
                 <span>Quizzes</span>
             </a>
-            <a href="/dashboard" class="sidebar-link" data-section="assignments">
+            <a href="/dashboard#assignments" class="sidebar-link" data-section="assignments">
                 <i class="fa-solid fa-tasks"></i>
                 <span>Assignments</span>
             </a>
@@ -49,7 +49,7 @@
             </div>
         </div>
 
-        <div class="dashboard-content">
+        <div class="dashboard-content mx-auto">
             <div class="lb-container" style="margin: 0; padding: 20px 0 60px;">
 
                 <h2 class="lb-main-title">
@@ -88,6 +88,9 @@
                         <div class="lb-house-name"><?= htmlspecialchars($house['house_name']) ?></div>
                         <div class="lb-house-pts"><?= number_format($house['total_points']) ?></div>
                         <div class="lb-house-label">points</div>
+                        <div class="lb-house-label">
+                            <?= (int) $house['students_count'] ?> students · <?= (int) $house['scored_submissions'] ?> scores
+                        </div>
                         <div class="lb-progress-wrap">
                             <div class="lb-progress-bar" style="width:<?= $pct ?>%; background:<?= $style['bar'] ?>;">
                             </div>
@@ -109,14 +112,16 @@
                                 <th>Student</th>
                                 <th>House</th>
                                 <th>Points</th>
+                                <th>Work</th>
                                 <th>Quizzes</th>
+                                <th>Tasks</th>
                                 <th>Avg Score</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php if (empty($students)): ?>
                             <tr>
-                                <td colspan="6" style="text-align:center; color:#5a7090; padding:30px;">
+                                <td colspan="8" style="text-align:center; color:#5a7090; padding:30px;">
                                     No students found yet.
                                 </td>
                             </tr>
@@ -150,7 +155,9 @@
                                         class="lb-badge <?= $badgeClass ?>"><?= htmlspecialchars($s['house']) ?></span>
                                 </td>
                                 <td class="lb-pts-cell"><?= number_format($s['total_points']) ?></td>
+                                <td><?= (int) $s['work_completed'] ?></td>
                                 <td><?= $s['quizzes_completed'] ?></td>
+                                <td><?= (int) $s['tasks_completed'] ?></td>
                                 <td><span class="lb-score"><?= $s['avg_score'] ?>%</span></td>
                             </tr>
                             <?php endforeach; ?>
