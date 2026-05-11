@@ -3,6 +3,7 @@
 use Core\App;
 
 $db = App::resolve('Core\Database');
+$professor = require_current_professor($db);
 
 $assignment_id = $_GET['id'] ?? null;
 
@@ -11,21 +12,30 @@ if (!$assignment_id) {
 }
 
 $assignment = $db->query('SELECT
-        assignment_id,
-        course_id,
-        assignment_type,
-        title,
-        max_points,
-        deadline
+        Assignment.assignment_id,
+        Assignment.course_id,
+        Assignment.assignment_type,
+        Assignment.title,
+        Assignment.max_points,
+        Assignment.deadline
         FROM Assignment
-        WHERE assignment_id = :id
-        ', ['id' => $assignment_id])->find();
+        JOIN Course ON Assignment.course_id = Course.course_id
+        WHERE Assignment.assignment_id = :id
+            AND Course.professor_id = :professor_id
+        ', [
+    'id' => $assignment_id,
+    'professor_id' => $professor['professor_id'],
+])->find();
 
 if (!$assignment) {
     abort(404);
 }
 
-$courses = $db->query('SELECT course_id, course_name FROM Course ORDER BY course_name')->get();
+$courses = $db->query('SELECT course_id, course_name
+        FROM Course
+        WHERE professor_id = :professor_id
+        ORDER BY course_name
+    ', ['professor_id' => $professor['professor_id']])->get();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $title = trim($_POST['title'] ?? '');
@@ -38,8 +48,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         redirect('/edit-assignment?id=' . $assignment_id);
     }
 
-    $course = $db->query('SELECT course_id FROM Course WHERE course_id = :id', [
+    $course = $db->query('SELECT course_id FROM Course
+            WHERE course_id = :id AND professor_id = :professor_id
+        ', [
         'id' => $course_id,
+        'professor_id' => $professor['professor_id'],
     ])->find();
 
     if (!$course) {
@@ -70,7 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     redirect('/show-assignment?id=' . $assignment_id);
 }
 
-return view('Dashboard/edit-assignment.view.php', [
+return view('Dashboard/edit-assignment', [
     'assignment' => $assignment,
     'courses' => $courses,
 ]);

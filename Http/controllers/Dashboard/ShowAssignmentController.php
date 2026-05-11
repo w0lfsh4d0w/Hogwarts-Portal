@@ -16,6 +16,7 @@ $assignment = $db->query('SELECT
         Assignment.assignment_type,
         Course.course_id,
         Course.course_name,
+        Course.professor_id AS course_professor_id,
         Professor.professor_name,
         Assignment.max_points,
         Assignment.deadline,
@@ -27,7 +28,7 @@ $assignment = $db->query('SELECT
         LEFT JOIN Submission ON Assignment.assignment_id = Submission.assign_id
         WHERE Assignment.assignment_id = :id
         GROUP BY Assignment.assignment_id, Assignment.title, Assignment.assignment_type, 
-                 Course.course_id, Course.course_name, Professor.professor_name, 
+                 Course.course_id, Course.course_name, Course.professor_id, Professor.professor_name, 
                  Assignment.max_points, Assignment.deadline, Assignment.created_at
         ', ['id' => $assignment_id])->find();
 
@@ -35,19 +36,34 @@ if (!$assignment) {
     abort(404);
 }
 
-$submissions = $db->query('SELECT 
-        Submission.submission_id,
+if (is_professor()) {
+    $professor = require_current_professor($db);
+
+    if ((int) $assignment['course_professor_id'] !== (int) $professor['professor_id']) {
+        abort(403);
+    }
+}
+
+$submissions = $db->query('SELECT
+        Student.student_id,
         User.user_name,
+        Submission.submission_id,
         Submission.score,
         Submission.submitted_at
-        FROM Submission
-        JOIN Student ON Submission.student_id = Student.student_id
+        FROM Assignment
+        JOIN Enrollment
+            ON Assignment.course_id = Enrollment.course_id
+            AND Enrollment.status = "Enrolled"
+        JOIN Student ON Enrollment.student_id = Student.student_id
         JOIN User ON Student.user_id = User.user_id
-        WHERE Submission.assign_id = :id
-        ORDER BY Submission.submitted_at DESC
+        LEFT JOIN Submission
+            ON Assignment.assignment_id = Submission.assign_id
+            AND Submission.student_id = Student.student_id
+        WHERE Assignment.assignment_id = :id
+        ORDER BY User.user_name
         ', ['id' => $assignment_id])->get();
 
-return view('Dashboard/show-assignment.view.php', [
+return view('Dashboard/show-assignment', [
     'assignment' => $assignment,
     'submissions' => $submissions,
 ]);

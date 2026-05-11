@@ -3,6 +3,7 @@
 use Core\App;
 
 $db = App::resolve('Core\Database');
+$professor = require_current_professor($db);
 
 $course_id = $_GET['id'] ?? null;
 
@@ -21,8 +22,12 @@ $course = $db->query('SELECT
         LEFT JOIN Enrollment ON Course.course_id = Enrollment.course_id
         LEFT JOIN Assignment ON Course.course_id = Assignment.course_id
         WHERE Course.course_id = :id
+            AND Course.professor_id = :professor_id
         GROUP BY Course.course_id, Course.course_name, Professor.professor_name
-        ', ['id' => $course_id])->find();
+        ', [
+    'id' => $course_id,
+    'professor_id' => $professor['professor_id'],
+])->find();
 
 if (!$course) {
     abort(404);
@@ -44,6 +49,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     redirect('/dashboard');
 }
 
-return view('Dashboard/delete-course.view.php', [
+return view('Dashboard/delete-course', [
     'course' => $course,
 ]);

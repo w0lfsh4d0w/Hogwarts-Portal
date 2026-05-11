@@ -5,6 +5,8 @@ use Core\App;
 $db = App::resolve('Core\Database');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $professor = require_current_professor($db);
+
     $title = trim($_POST['title'] ?? '');
     $course_id = $_POST['course_id'] ?? '';
     $assignment_type = $_POST['assignment_type'] ?? '';
@@ -23,8 +25,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Verify course exists
-    $course = $db->query('SELECT course_id FROM Course WHERE course_id = :id', 
-        ['id' => $course_id])->find();
+    $course = $db->query('SELECT course_id FROM Course
+            WHERE course_id = :id AND professor_id = :professor_id
+        ', [
+        'id' => $course_id,
+        'professor_id' => $professor['professor_id'],
+    ])->find();
     if (!$course) {
         redirect($redirectTo);
     }

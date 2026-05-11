@@ -52,6 +52,22 @@ $courses = $db->query('SELECT
         ORDER BY Enrollment.enrolled_at DESC
         ', ['student_id' => $student['student_id']])->get();
 
+$availableCourses = $db->query('SELECT
+        Course.course_id,
+        Course.course_name,
+        Professor.professor_name,
+        Enrollment.status AS enrollment_status,
+        COUNT(DISTINCT Assignment.assignment_id) AS assignments_count
+        FROM Course
+        JOIN Professor ON Course.professor_id = Professor.professor_id
+        LEFT JOIN Enrollment
+            ON Course.course_id = Enrollment.course_id
+            AND Enrollment.student_id = :student_id
+        LEFT JOIN Assignment ON Course.course_id = Assignment.course_id
+        GROUP BY Course.course_id, Course.course_name, Professor.professor_name, Enrollment.status
+        ORDER BY Course.course_name
+        ', ['student_id' => $student['student_id']])->get();
+
 $assignments = $db->query('SELECT
         Assignment.assignment_id,
         Assignment.title,
@@ -123,9 +139,10 @@ $stats = [
     'average_score' => $possibleSubmittedPoints > 0 ? round(($earnedPoints / $possibleSubmittedPoints) * 100) : 0,
 ];
 
-return view('student-panel.view.php', [
+return view('student-panel', [
     'student' => $student,
     'courses' => $courses,
+    'availableCourses' => $availableCourses,
     'assignments' => $assignments,
     'quizzes' => $quizzes,
     'tasks' => $tasks,

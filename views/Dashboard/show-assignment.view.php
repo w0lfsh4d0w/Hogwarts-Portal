@@ -1,5 +1,7 @@
 <?php
 include(base_path('views/partials/header.view.php'));
+
+$canManageAcademic = is_professor();
 ?>
 
 <div class="dashboard-container">
@@ -51,37 +53,69 @@ include(base_path('views/partials/header.view.php'));
                 </div>
 
                 <?php if (count($submissions) > 0): ?>
-                    <h4 style="margin-top: 30px; margin-bottom: 15px;">Student Submissions</h4>
+                    <h4 style="margin-top: 30px; margin-bottom: 15px;">Student Scores</h4>
                     <table class="dashboard-table">
                         <thead>
                             <tr>
                                 <th>Student Name</th>
                                 <th>Score</th>
                                 <th>Submitted At</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php foreach ($submissions as $sub): ?>
+                                <?php $scoreFormId = 'score-form-' . $assignment['assignment_id'] . '-' . $sub['student_id']; ?>
                                 <tr>
-                                    <td><?php echo $sub['user_name']; ?></td>
-                                    <td><?php echo $sub['score']; ?>/<?php echo $assignment['max_points']; ?></td>
-                                    <td><?php echo date('Y-m-d H:i', strtotime($sub['submitted_at'])); ?></td>
+                                    <td><?php echo htmlspecialchars($sub['user_name']); ?></td>
+                                    <?php if ($canManageAcademic): ?>
+                                        <td>
+                                            <form id="<?php echo $scoreFormId; ?>" method="POST" action="/store-score" style="margin: 0;"></form>
+                                            <input form="<?php echo $scoreFormId; ?>" type="hidden" name="assignment_id" value="<?php echo $assignment['assignment_id']; ?>">
+                                            <input form="<?php echo $scoreFormId; ?>" type="hidden" name="student_id" value="<?php echo $sub['student_id']; ?>">
+                                            <input form="<?php echo $scoreFormId; ?>" type="number" name="score" class="form-control" min="0" max="<?php echo $assignment['max_points']; ?>" value="<?php echo $sub['score'] ?? 0; ?>" required style="max-width: 120px; display: inline-block;">
+                                            / <?php echo $assignment['max_points']; ?>
+                                        </td>
+                                    <?php else: ?>
+                                        <td>
+                                            <?php echo $sub['submission_id'] ? $sub['score'] . '/' . $assignment['max_points'] : '-'; ?>
+                                        </td>
+                                    <?php endif; ?>
+                                    <td>
+                                        <?php echo $sub['submitted_at'] ? date('Y-m-d H:i', strtotime($sub['submitted_at'])) : 'Not submitted'; ?>
+                                    </td>
+                                    <?php if ($canManageAcademic): ?>
+                                        <td>
+                                            <button form="<?php echo $scoreFormId; ?>" type="submit" class="btn-action edit">Save Score</button>
+                                            <?php if ($sub['submission_id']): ?>
+                                                <form method="POST" action="/delete-score" style="display: inline;">
+                                                    <input type="hidden" name="assignment_id" value="<?php echo $assignment['assignment_id']; ?>">
+                                                    <input type="hidden" name="submission_id" value="<?php echo $sub['submission_id']; ?>">
+                                                    <button type="submit" class="btn-action delete">Delete Score</button>
+                                                </form>
+                                            <?php endif; ?>
+                                        </td>
+                                    <?php else: ?>
+                                        <td>-</td>
+                                    <?php endif; ?>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
                     </table>
                 <?php else: ?>
-                    <p style="margin-top: 20px; color: #666;">No submissions yet.</p>
+                    <p style="margin-top: 20px; color: #666;">No students are enrolled in this course yet.</p>
                 <?php endif; ?>
 
-                <div class="action-buttons" style="margin-top: 30px;">
-                    <a href="/edit-assignment?id=<?php echo $assignment['assignment_id']; ?>" class="btn btn-submit">
-                        <i class="fa-solid fa-edit"></i> Edit Assignment
-                    </a>
-                    <a href="/delete-assignment?id=<?php echo $assignment['assignment_id']; ?>" class="btn btn-danger" style="background-color: #d32f2f; margin-left: 10px;">
-                        <i class="fa-solid fa-trash"></i> Delete Assignment
-                    </a>
-                </div>
+                <?php if ($canManageAcademic): ?>
+                    <div class="action-buttons" style="margin-top: 30px;">
+                        <a href="/edit-assignment?id=<?php echo $assignment['assignment_id']; ?>" class="btn btn-submit">
+                            <i class="fa-solid fa-edit"></i> Edit Assignment
+                        </a>
+                        <a href="/delete-assignment?id=<?php echo $assignment['assignment_id']; ?>" class="btn btn-danger" style="background-color: #d32f2f; margin-left: 10px;">
+                            <i class="fa-solid fa-trash"></i> Delete Assignment
+                        </a>
+                    </div>
+                <?php endif; ?>
             </section>
         </div>
     </div>

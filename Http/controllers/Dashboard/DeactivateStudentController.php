@@ -25,6 +25,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     redirect('/dashboard');
 }
 
-return view('Dashboard/deactivate-student.view.php', [
+return view('Dashboard/deactivate-student', [
     'student' => $student,
 ]);

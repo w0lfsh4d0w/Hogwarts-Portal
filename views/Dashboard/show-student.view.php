@@ -1,5 +1,7 @@
 <?php
 include(base_path('views/partials/header.view.php'));
+
+$canManageAcademic = is_professor();
 ?>
 
 <div class="dashboard-container">
@@ -46,17 +48,19 @@ include(base_path('views/partials/header.view.php'));
                     </div>
                 </div>
 
-                <div class="action-buttons" style="margin-top: 30px;">
-                    <a href="/edit-student?id=<?php echo $student['student_id']; ?>" class="btn btn-submit">
-                        <i class="fa-solid fa-edit"></i> Edit Student
-                    </a>
-                    <a href="/deactivate-student?id=<?php echo $student['student_id']; ?>" class="btn btn-danger" style="background-color: #d32f2f; margin-left: 10px;">
-                        <i class="fa-solid fa-ban"></i> Deactivate Student
-                    </a>
-                    <a href="/delete-student?id=<?php echo $student['student_id']; ?>" class="btn btn-danger" style="background-color: #a61b1b; margin-left: 10px;">
-                        <i class="fa-solid fa-trash"></i> Delete Student
-                    </a>
-                </div>
+                <?php if ($canManageAcademic): ?>
+                    <div class="action-buttons" style="margin-top: 30px;">
+                        <a href="/edit-student?id=<?php echo $student['student_id']; ?>" class="btn btn-submit">
+                            <i class="fa-solid fa-edit"></i> Edit Student
+                        </a>
+                        <a href="/deactivate-student?id=<?php echo $student['student_id']; ?>" class="btn btn-danger" style="background-color: #d32f2f; margin-left: 10px;">
+                            <i class="fa-solid fa-ban"></i> Deactivate Student
+                        </a>
+                        <a href="/delete-student?id=<?php echo $student['student_id']; ?>" class="btn btn-danger" style="background-color: #a61b1b; margin-left: 10px;">
+                            <i class="fa-solid fa-trash"></i> Delete Student
+                        </a>
+                    </div>
+                <?php endif; ?>
             </section>
         </div>
     </div>

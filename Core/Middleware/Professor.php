@@ -2,7 +2,7 @@
 
 namespace Core\Middleware;
 
-class Dumbledore
+class Professor
 {
     public function handle()
     {
@@ -11,7 +11,7 @@ class Dumbledore
             exit();
         }
 
-        if (!is_dumbledore()) {
+        if (!is_professor()) {
             \abort(403);
         }
     }

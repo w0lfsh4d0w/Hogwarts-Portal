@@ -2,22 +2,18 @@
 
 namespace Core;
 
+use Http\Models\UserModel;
+
 class Authenticator
 {
     public function attempt($email, $password)
     {
-        $user = App::resolve(Database::class)->query("SELECT * FROM User WHERE email = :email", [
-            ':email' => $email
-        ])->find();
+        $userModel = new UserModel();
+        $user = $userModel->FindUser($email);
 
         if ($user) {
             if (password_verify($password, $user['password']) || hash_equals($user['password'], $password)) {
-                $this->login([
-                    'user_id' => $user['user_id'],
-                    'user_name' => $user['user_name'],
-                    'email' => $user['email'],
-                    'role' => $user['role'],
-                ]);
+                $this->login($user);
                 return true;
             }
         }
@@ -31,6 +27,8 @@ class Authenticator
             'user_name' => $user['user_name'] ?? null,
             'email' => $user['email'],
             'role' => $user['role'] ?? null,
+            'student_id' => $user['student_id'] ?? null,
+            'house_id' => $user['house_id'] ?? null,
         ];
 
         session_regenerate_id(true);

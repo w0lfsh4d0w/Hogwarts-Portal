@@ -2,6 +2,9 @@
 include(base_path('views/partials/header.view.php'));
 
 $houseStudentCounts = array_column($houseStats ?? [], 'students_count', 'house_name');
+$canManageAcademic = is_professor();
+$canCreateProfessor = is_dumbledore();
+$dashboardActionVerb = $canManageAcademic ? 'Manage' : 'View';
 ?>
 
 <div class="dashboard-container">
@@ -83,19 +86,19 @@ $houseStudentCounts = array_column($houseStats ?? [], 'students_count', 'house_n
                 <!-- Quick Actions -->
                 <div class="quick-actions">
                     <button class="btn btn-submit" onclick="showSection('students')">
-                        <i class="fa-solid fa-users"></i> Manage Students
+                        <i class="fa-solid fa-users"></i> <?php echo $dashboardActionVerb; ?> Students
                     </button>
                     <button class="btn btn-submit" onclick="showSection('professors')">
-                        <i class="fa-solid fa-chalkboard-user"></i> Manage Professors
+                        <i class="fa-solid fa-chalkboard-user"></i> <?php echo $dashboardActionVerb; ?> Professors
                     </button>
                     <button class="btn btn-submit" onclick="showSection('courses')">
-                        <i class="fa-solid fa-book"></i> Manage Courses
+                        <i class="fa-solid fa-book"></i> <?php echo $dashboardActionVerb; ?> Courses
                     </button>
                     <button class="btn btn-submit" onclick="showSection('quizzes')">
-                        <i class="fa-solid fa-question"></i> Manage Quizzes
+                        <i class="fa-solid fa-question"></i> <?php echo $dashboardActionVerb; ?> Quizzes
                     </button>
                     <button class="btn btn-submit" onclick="showSection('assignments')">
-                        <i class="fa-solid fa-tasks"></i> Manage Assignments
+                        <i class="fa-solid fa-tasks"></i> <?php echo $dashboardActionVerb; ?> Assignments
                     </button>
                 </div>
             </section>
@@ -153,8 +156,10 @@ $houseStudentCounts = array_column($houseStats ?? [], 'students_count', 'house_n
                                     <td><span class="badge <?php echo strtolower($std['status']); ?>"><?php echo $std['status']; ?></span></td>
                                     <td>
                                         <a href="/show-student?id=<?php echo $std['student_id']; ?>" class="btn-action show">View</a>
-                                        <a href="/edit-student?id=<?php echo $std['student_id']; ?>" class="btn-action edit">Edit</a>
-                                        <a href="/delete-student?id=<?php echo $std['student_id']; ?>" class="btn-action delete">Delete</a>
+                                        <?php if ($canManageAcademic): ?>
+                                            <a href="/edit-student?id=<?php echo $std['student_id']; ?>" class="btn-action edit">Edit</a>
+                                            <a href="/delete-student?id=<?php echo $std['student_id']; ?>" class="btn-action delete">Delete</a>
+                                        <?php endif; ?>
                                     </td>
                                 </tr>
                             <?php
@@ -164,12 +169,13 @@ $houseStudentCounts = array_column($houseStats ?? [], 'students_count', 'house_n
                     </table>
                 </div>
 
-                <!-- Enroll New Student Form -->
-                <div class="form-section">
-                    <h4 class="form-title">
-                        <i class="fa-solid fa-user-plus"></i> Enroll New Student
-                    </h4>
-                    <form method="POST" action="/store-student" class="enroll-form">
+                <?php if ($canManageAcademic): ?>
+                    <!-- Enroll New Student Form -->
+                    <div class="form-section">
+                        <h4 class="form-title">
+                            <i class="fa-solid fa-user-plus"></i> Enroll New Student
+                        </h4>
+                        <form method="POST" action="/store-student" class="enroll-form">
                         <div class="form-row">
                             <div class="form-group">
                                 <label>Full Name</label>
@@ -227,8 +233,9 @@ $houseStudentCounts = array_column($houseStats ?? [], 'students_count', 'house_n
                         <button type="submit" class="btn btn-submit">
                             <i class="fa-solid fa-plus"></i> Enroll Student
                         </button>
-                    </form>
-                </div>
+                        </form>
+                    </div>
+                <?php endif; ?>
             </section>
 
             <!-- Professors Management Section -->
@@ -282,8 +289,6 @@ $houseStudentCounts = array_column($houseStats ?? [], 'students_count', 'house_n
                                     <td><span class="badge active">Active</span></td>
                                     <td>
                                         <a href="/show-professor?id=<?php echo $prof['professor_id']; ?>" class="btn-action show">View</a>
-                                        <a href="/edit-professor?id=<?php echo $prof['professor_id']; ?>" class="btn-action edit">Edit</a>
-                                        <a href="/delete-professor?id=<?php echo $prof['professor_id']; ?>" class="btn-action delete">Delete</a>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
@@ -291,12 +296,13 @@ $houseStudentCounts = array_column($houseStats ?? [], 'students_count', 'house_n
                     </table>
                 </div>
 
-                <!-- Add New Professor Form -->
-                <div class="form-section">
-                    <h4 class="form-title">
-                        <i class="fa-solid fa-user-plus"></i> Add New Professor
-                    </h4>
-                    <form method="POST" action="/store-professor" class="enroll-form">
+                <?php if ($canCreateProfessor): ?>
+                    <!-- Add New Professor Form -->
+                    <div class="form-section">
+                        <h4 class="form-title">
+                            <i class="fa-solid fa-user-plus"></i> Add New Professor
+                        </h4>
+                        <form method="POST" action="/store-professor" class="enroll-form">
                         <div class="form-row">
                             <div class="form-group">
                                 <label>Full Name</label>
@@ -320,8 +326,9 @@ $houseStudentCounts = array_column($houseStats ?? [], 'students_count', 'house_n
                         <button type="submit" class="btn btn-submit">
                             <i class="fa-solid fa-plus"></i> Add Professor
                         </button>
-                    </form>
-                </div>
+                        </form>
+                    </div>
+                <?php endif; ?>
             </section>
 
             <!-- Courses Management Section -->
@@ -377,8 +384,10 @@ $houseStudentCounts = array_column($houseStats ?? [], 'students_count', 'house_n
                                     <td><span class="badge active">Active</span></td>
                                     <td>
                                         <a href="/show-course?id=<?php echo $course['course_id']; ?>" class="btn-action show">View</a>
-                                        <a href="/edit-course?id=<?php echo $course['course_id']; ?>" class="btn-action edit">Edit</a>
-                                        <a href="/delete-course?id=<?php echo $course['course_id']; ?>" class="btn-action delete">Delete</a>
+                                        <?php if ($canManageAcademic): ?>
+                                            <a href="/edit-course?id=<?php echo $course['course_id']; ?>" class="btn-action edit">Edit</a>
+                                            <a href="/delete-course?id=<?php echo $course['course_id']; ?>" class="btn-action delete">Delete</a>
+                                        <?php endif; ?>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
@@ -386,12 +395,13 @@ $houseStudentCounts = array_column($houseStats ?? [], 'students_count', 'house_n
                     </table>
                 </div>
 
-                <!-- Add New Course Form -->
-                <div class="form-section">
-                    <h4 class="form-title">
-                        <i class="fa-solid fa-plus"></i> Add New Course
-                    </h4>
-                    <form method="POST" action="/store-course" class="enroll-form">
+                <?php if ($canManageAcademic): ?>
+                    <!-- Add New Course Form -->
+                    <div class="form-section">
+                        <h4 class="form-title">
+                            <i class="fa-solid fa-plus"></i> Add New Course
+                        </h4>
+                        <form method="POST" action="/store-course" class="enroll-form">
                         <div class="form-row">
                             <div class="form-group">
                                 <label>Course Name</label>
@@ -399,19 +409,16 @@ $houseStudentCounts = array_column($houseStats ?? [], 'students_count', 'house_n
                             </div>
                             <div class="form-group">
                                 <label>Professor</label>
-                                <select name="professor_id" class="form-control" required>
-                                    <option value="">Select Professor</option>
-                                    <?php foreach ($Professors as $prof): ?>
-                                        <option value="<?php echo $prof['professor_id']; ?>"><?php echo $prof['professor_name']; ?></option>
-                                    <?php endforeach; ?>
-                                </select>
+                                <input type="hidden" name="professor_id" value="<?php echo $currentProfessor['professor_id'] ?? ''; ?>">
+                                <input type="text" class="form-control" value="<?php echo htmlspecialchars($currentProfessor['professor_name'] ?? 'Current Professor'); ?>" disabled>
                             </div>
                         </div>
                         <button type="submit" class="btn btn-submit">
                             <i class="fa-solid fa-plus"></i> Add Course
                         </button>
-                    </form>
-                </div>
+                        </form>
+                    </div>
+                <?php endif; ?>
             </section>
 
             <!-- Quizzes Management Section -->
@@ -468,8 +475,10 @@ $houseStudentCounts = array_column($houseStats ?? [], 'students_count', 'house_n
 	                                    <td><?php echo $assign['submission_count']; ?></td>
                                     <td>
                                         <a href="/show-assignment?id=<?php echo $assign['assignment_id']; ?>" class="btn-action show">View</a>
-                                        <a href="/edit-assignment?id=<?php echo $assign['assignment_id']; ?>" class="btn-action edit">Edit</a>
-                                        <a href="/delete-assignment?id=<?php echo $assign['assignment_id']; ?>" class="btn-action delete">Delete</a>
+                                        <?php if ($canManageAcademic): ?>
+                                            <a href="/edit-assignment?id=<?php echo $assign['assignment_id']; ?>" class="btn-action edit">Edit</a>
+                                            <a href="/delete-assignment?id=<?php echo $assign['assignment_id']; ?>" class="btn-action delete">Delete</a>
+                                        <?php endif; ?>
                                     </td>
                                 </tr>
                             <?php endif; 
@@ -478,12 +487,13 @@ $houseStudentCounts = array_column($houseStats ?? [], 'students_count', 'house_n
                     </table>
                 </div>
 
-                <!-- Add New Quiz Form -->
-                <div class="form-section">
-                    <h4 class="form-title">
-                        <i class="fa-solid fa-plus"></i> Create New Quiz
-                    </h4>
-                    <form method="POST" action="/store-assignment" class="enroll-form">
+                <?php if ($canManageAcademic): ?>
+                    <!-- Add New Quiz Form -->
+                    <div class="form-section">
+                        <h4 class="form-title">
+                            <i class="fa-solid fa-plus"></i> Create New Quiz
+                        </h4>
+                        <form method="POST" action="/store-assignment" class="enroll-form">
                         <input type="hidden" name="assignment_type" value="Quiz">
                         <div class="form-row">
                             <div class="form-group">
@@ -517,8 +527,9 @@ $houseStudentCounts = array_column($houseStats ?? [], 'students_count', 'house_n
                         <button type="submit" class="btn btn-submit">
                             <i class="fa-solid fa-plus"></i> Create Quiz
                         </button>
-                    </form>
-                </div>
+                        </form>
+                    </div>
+                <?php endif; ?>
             </section>
 
             <!-- Assignments Management Section -->
@@ -580,8 +591,10 @@ $houseStudentCounts = array_column($houseStats ?? [], 'students_count', 'house_n
                                     <td><?php echo $assign['submission_count']; ?></td>
                                     <td>
                                         <a href="/show-assignment?id=<?php echo $assign['assignment_id']; ?>" class="btn-action show">View</a>
-                                        <a href="/edit-assignment?id=<?php echo $assign['assignment_id']; ?>" class="btn-action edit">Edit</a>
-                                        <a href="/delete-assignment?id=<?php echo $assign['assignment_id']; ?>" class="btn-action delete">Delete</a>
+                                        <?php if ($canManageAcademic): ?>
+                                            <a href="/edit-assignment?id=<?php echo $assign['assignment_id']; ?>" class="btn-action edit">Edit</a>
+                                            <a href="/delete-assignment?id=<?php echo $assign['assignment_id']; ?>" class="btn-action delete">Delete</a>
+                                        <?php endif; ?>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
@@ -589,12 +602,13 @@ $houseStudentCounts = array_column($houseStats ?? [], 'students_count', 'house_n
                     </table>
                 </div>
 
-                <!-- Create New Assignment Form -->
-                <div class="form-section">
-                    <h4 class="form-title">
-                        <i class="fa-solid fa-plus"></i> Create New Assignment
-                    </h4>
-                    <form method="POST" action="/store-assignment" class="enroll-form">
+                <?php if ($canManageAcademic): ?>
+                    <!-- Create New Assignment Form -->
+                    <div class="form-section">
+                        <h4 class="form-title">
+                            <i class="fa-solid fa-plus"></i> Create New Assignment
+                        </h4>
+                        <form method="POST" action="/store-assignment" class="enroll-form">
                         <div class="form-row">
                             <div class="form-group">
                                 <label>Assignment Title</label>
@@ -636,8 +650,9 @@ $houseStudentCounts = array_column($houseStats ?? [], 'students_count', 'house_n
                         <button type="submit" class="btn btn-submit">
                             <i class="fa-solid fa-plus"></i> Create Assignment
                         </button>
-                    </form>
-                </div>
+                        </form>
+                    </div>
+                <?php endif; ?>
             </section>
 
         </div>

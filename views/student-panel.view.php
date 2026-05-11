@@ -112,6 +112,72 @@ function studentPanelStatusClass($status)
                         <strong><?php echo $stats['pending']; ?></strong>
                     </div>
                 </div>
+
+                <!-- Your Courses Quick View -->
+                <div style="margin-top: 40px;">
+                    <h4 class="section-title" style="margin-bottom: 20px;">
+                        <i class="fa-solid fa-book-open"></i> Your Courses
+                    </h4>
+                    <?php if (!empty($courses)): ?>
+                        <div class="table-container">
+                            <table class="dashboard-table">
+                                <thead>
+                                    <tr>
+                                        <th>Course</th>
+                                        <th>Professor</th>
+                                        <th>Status</th>
+                                        <th>Assignments</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach (array_slice($courses, 0, 5) as $course): ?>
+                                        <tr>
+                                            <td><?php echo htmlspecialchars($course['course_name']); ?></td>
+                                            <td><?php echo htmlspecialchars($course['professor_name']); ?></td>
+                                            <td><span class="badge <?php echo strtolower($course['status']); ?>"><?php echo htmlspecialchars($course['status']); ?></span></td>
+                                            <td><?php echo $course['assignments_count']; ?></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    <?php else: ?>
+                        <p style="color: #666; font-style: italic;">You are not registered for any courses yet.</p>
+                    <?php endif; ?>
+                </div>
+
+                <!-- Pending Work Quick View -->
+                <div style="margin-top: 40px;">
+                    <h4 class="section-title" style="margin-bottom: 20px;">
+                        <i class="fa-solid fa-list-check"></i> Pending Work
+                    </h4>
+                    <?php if (!empty($pendingAssignments)): ?>
+                        <div class="table-container">
+                            <table class="dashboard-table">
+                                <thead>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Type</th>
+                                        <th>Course</th>
+                                        <th>Deadline</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach (array_slice($pendingAssignments, 0, 5) as $assignment): ?>
+                                        <tr>
+                                            <td><?php echo htmlspecialchars($assignment['title']); ?></td>
+                                            <td><span class="badge badge-<?php echo strtolower($assignment['assignment_type']); ?>"><?php echo htmlspecialchars($assignment['assignment_type']); ?></span></td>
+                                            <td><?php echo htmlspecialchars($assignment['course_name']); ?></td>
+                                            <td><?php echo date('M d, Y', strtotime($assignment['deadline'])); ?></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    <?php else: ?>
+                        <p style="color: #666; font-style: italic;">No pending work at the moment!</p>
+                    <?php endif; ?>
+                </div>
             </section>
 
             <section id="courses-section" class="dashboard-section">
@@ -149,6 +215,57 @@ function studentPanelStatusClass($status)
                             <?php endforeach; ?>
                         </tbody>
                     </table>
+                </div>
+
+                <div style="margin-top: 40px;">
+                    <h3 class="section-title">
+                        <i class="fa-solid fa-plus"></i> Choose Courses
+                    </h3>
+
+                    <div class="table-container">
+                        <table class="dashboard-table">
+                            <thead>
+                                <tr>
+                                    <th>Course</th>
+                                    <th>Professor</th>
+                                    <th>Assignments</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php if (empty($availableCourses)): ?>
+                                    <tr>
+                                        <td colspan="5">No courses are available yet.</td>
+                                    </tr>
+                                <?php endif; ?>
+                                <?php foreach ($availableCourses as $course): ?>
+                                    <tr>
+                                        <td><?php echo htmlspecialchars($course['course_name']); ?></td>
+                                        <td><?php echo htmlspecialchars($course['professor_name']); ?></td>
+                                        <td><?php echo $course['assignments_count']; ?></td>
+                                        <td>
+                                            <?php if ($course['enrollment_status'] === 'Enrolled'): ?>
+                                                <span class="badge active">Enrolled</span>
+                                            <?php else: ?>
+                                                <span class="badge pending">Available</span>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td>
+                                            <?php if ($course['enrollment_status'] === 'Enrolled'): ?>
+                                                -
+                                            <?php else: ?>
+                                                <form method="POST" action="/enroll-course" style="margin: 0;">
+                                                    <input type="hidden" name="course_id" value="<?php echo $course['course_id']; ?>">
+                                                    <button type="submit" class="btn-action edit">Enroll</button>
+                                                </form>
+                                            <?php endif; ?>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </section>
 
@@ -210,6 +327,11 @@ function studentPanelStatusClass($status)
                 showStudentPanelSection(this.getAttribute('data-section'));
             });
         });
+
+        const initialSection = window.location.hash.replace('#', '');
+        if (initialSection) {
+            showStudentPanelSection(initialSection);
+        }
     });
 </script>
 

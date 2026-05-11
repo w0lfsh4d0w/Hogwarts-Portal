@@ -30,6 +30,6 @@ if (!$student) {
     abort(404);
 }
 
-return view('Dashboard/show-student.view.php', [
+return view('Dashboard/show-student', [
     'student' => $student,
 ]);

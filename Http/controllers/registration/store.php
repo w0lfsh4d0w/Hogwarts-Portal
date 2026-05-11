@@ -1,48 +1,67 @@
 <?php
 
+use Http\Models\UserModel;
 use Core\App;
 use Core\Database;
 use Core\Validator;
+use Http\Models\HouseModel;
+use Http\Models\StudentModel;
 use Core\Authenticator;
+use Core\Session;
 
 $db = App::resolve(Database::class);
-
+$name = $_POST['name'];
 $email = $_POST['email'];
 $password = $_POST['password'];
+$password_confirmation = $_POST['password_confirmation'];
 
 $errors = [];
+// check is not empty 
+if (!Validator::string($name, 1, 100)) {
+    $errors['name'] = 'Please provide a valid name.';
+}
 if (!Validator::email($email)) {
     $errors['email'] = 'Please provide a valid email address.';
 }
-
-if (!Validator::string($password, 7, 255)) {
-    $errors['password'] = 'Password must be at least 8 characters long.';
+if (!Validator::string($password, 8, 255)) {
+    $errors['password'] = 'Please provide a password at least eight characters.';
 }
-if (count($errors)) {
-    return view('registration/create.view.php', [
-        'heading' => 'Create an Account',
-        'errors' => $errors
-    ]);
+if ($password != $password_confirmation) {
+    $errors['password_confirmation'] = 'Passwords must match';
+};
+
+if (!empty($errors)) {
+    Session::flash('errors', $errors);
+    Session::flash('old', ['name' => $name, 'email' => $email]);
+    redirect('/register');
     exit();
 }
 
-
-
-$user = $db->query("SELECT * FROM users WHERE email = :email", [
-    ':email' => $email
-])->find();
-
-if ($user) {
-    header('Location: /');
+$user = new  UserModel();
+$existingUser = $user->FindUser($email);
+if ($existingUser) {
+    Session::flash('errors', ['email' => 'Email already taken.']);
+    Session::flash('old', ['name' => $name, 'email' => $email]);
+    redirect('/register');
     exit();
 } else {
-    $db->query("INSERT INTO users (email, password) VALUES (:email, :password)", [
-        ':email' => $email,
-        ':password' => password_hash($password, PASSWORD_BCRYPT)
+    $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+    $userId = $user->CreateUser($name, $email, $hashedPassword);
+    $houseModel = new HouseModel();
+    $houses = $houseModel->GetHouses();
+    $randomIndex = array_rand($houses);
+    $houseId = $houses[$randomIndex]['house_id'];
+    $studentModel = new StudentModel();
+    $studentId = $studentModel->CreateStudent($userId, $houseId);
+    $auth = new Authenticator();
+    $auth->login([
+        'user_id'    => $userId,
+        'student_id' => $studentId,
+        'email'      => $email,
+        'role'       => 'Student',
+        'house_id'   => $houseId
     ]);
 
-    (new Authenticator)->login($user);
-
-    header('Location: /');
-    exit();
+    header('location: /');
+    exit(); //
 }

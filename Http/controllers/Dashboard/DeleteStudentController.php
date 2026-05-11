@@ -39,6 +39,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     redirect('/dashboard');
 }
 
-return view('Dashboard/delete-student.view.php', [
+return view('Dashboard/delete-student', [
     'student' => $student,
 ]);

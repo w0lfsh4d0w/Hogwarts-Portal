@@ -1,9 +1,29 @@
 <?php
-$header = "Dashboard";
-$request = $_SERVER['REQUEST_URI'];
+$user = current_user();
+$role = user_role();
+$userName = $user['user_name'] ?? 'Guest';
+$isStaff = is_staff();
+$header = $role === 'Professor' ? 'Professor Dashboard' : 'Dashboard';
+$request = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$dashboardPages = [
+  '/dashboard',
+  '/show-student',
+  '/edit-student',
+  '/deactivate-student',
+  '/delete-student',
+  '/show-professor',
+  '/edit-professor',
+  '/delete-professor',
+  '/show-course',
+  '/edit-course',
+  '/delete-course',
+  '/show-assignment',
+  '/edit-assignment',
+  '/delete-assignment',
+];
 // echo $request;
 
-if ($request === '/dashboard') {
+if ($isStaff && in_array($request, $dashboardPages, true)) {
 ?>
   <!-- Enhanced Dashboard Navbar -->
   <nav class="navbar navbar-expand-lg navbar-dark hogwarts-dashboard-navbar">
@@ -48,11 +68,11 @@ if ($request === '/dashboard') {
           <div class="user-info">
             <!-- User Avatar Placeholder -->
             <div class="user-avatar">
-              <i class="fa-solid fa-user-graduate"></i>
+              <i class="fa-solid <?php echo $role === 'Professor' ? 'fa-chalkboard-user' : 'fa-user-tie'; ?>"></i>
             </div>
             <div class="user-details d-none d-lg-block">
-              <span class="user-name">Administrator</span>
-              <span class="user-role">Headmaster</span>
+              <span class="user-name"><?php echo htmlspecialchars($userName); ?></span>
+              <span class="user-role"><?php echo $role === 'Professor' ? 'Professor' : 'Headmaster'; ?></span>
             </div>
           </div>
 
@@ -397,14 +417,21 @@ if ($request === '/dashboard') {
             <span>Services</span>
           </a>
 
-          <?php if (($_SESSION['user']['role'] ?? null) === 'Dumbledore'): ?>
+          <?php if ($role === 'Dumbledore'): ?>
             <a class="nav-link magical-link dashboard-link" href="/dashboard">
               <i class="fa-solid fa-chart-line me-1"></i>
               <span>Dumbledore Panel</span>
             </a>
           <?php endif; ?>
 
-          <?php if (($_SESSION['user']['role'] ?? null) === 'Student'): ?>
+          <?php if ($role === 'Professor'): ?>
+            <a class="nav-link magical-link dashboard-link" href="/dashboard">
+              <i class="fa-solid fa-chalkboard-user me-1"></i>
+              <span>Professor Dashboard</span>
+            </a>
+          <?php endif; ?>
+
+          <?php if ($role === 'Student'): ?>
             <a class="nav-link magical-link" href="/student-panel">
               <i class="fa-solid fa-user-graduate me-1"></i>
               <span>Student Panel</span>
@@ -415,22 +442,25 @@ if ($request === '/dashboard') {
         <!-- Auth Section -->
         <div class="navbar-nav ms-auto">
           <div class="auth-buttons">
-            <!-- Register/Login Button -->
-            <a class="nav-link btn-auth register-btn" href="#">
-              <i class="fa-solid fa-user-plus me-1"></i>
-              <span>Register</span>
-            </a>
-            <span class="auth-divider">|</span>
-            <a class="nav-link btn-auth login-btn" href="#">
-              <i class="fa-solid fa-key me-1"></i>
-              <span>Login</span>
-            </a>
-
-            <!-- Future: Logout Button (when logged in) -->
-            <!-- <a class="nav-link btn-auth logout-btn" href="/logout">
-              <i class="fa-solid fa-right-from-bracket me-1"></i>
-              <span>Logout</span>
-            </a> -->
+            <?php if (isset($_SESSION['user'])): ?>
+              <form action="/logout" method="POST" class="m-0">
+                <input type="hidden" name="_method" value="DELETE">
+                <button type="submit" class="nav-link btn-auth logout-btn">
+                  <i class="fa-solid fa-right-from-bracket me-1"></i>
+                  <span>Logout</span>
+                </button>
+              </form>
+            <?php else: ?>
+              <a class="nav-link btn-auth register-btn" href="/register">
+                <i class="fa-solid fa-user-plus me-1"></i>
+                <span>Register</span>
+              </a>
+              <span class="auth-divider">|</span>
+              <a class="nav-link btn-auth login-btn" href="/login">
+                <i class="fa-solid fa-key me-1"></i>
+                <span>Login</span>
+              </a>
+            <?php endif; ?>
           </div>
         </div>
       </div>

@@ -92,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-return view('Dashboard/edit-student.view.php', [
+return view('Dashboard/edit-student', [
     'student' => $student,
     'houses' => $houses,
 ]);

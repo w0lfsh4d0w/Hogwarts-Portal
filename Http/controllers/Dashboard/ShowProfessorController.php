@@ -33,7 +33,7 @@ if (!$professor) {
 $courses = $db->query('SELECT course_id, course_name FROM Course WHERE professor_id = :id', 
     ['id' => $professor_id])->get();
 
-return view('Dashboard/show-professor.view.php', [
+return view('Dashboard/show-professor', [
     'professor' => $professor,
     'courses' => $courses,
 ]);

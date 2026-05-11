@@ -57,6 +57,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     redirect('/show-professor?id=' . $professor_id);
 }
 
-return view('Dashboard/edit-professor.view.php', [
+return view('Dashboard/edit-professor', [
     'professor' => $professor,
 ]);

@@ -7,7 +7,9 @@ class Middleware
     public const MAP = [
         'auth' => Auth::class,
         'guest' => Guest::class,
-        'dumbledore' => Dumbledore::class
+        'dumbledore' => Dumbledore::class,
+        'professor' => Professor::class,
+        'staff' => Staff::class
     ];
 
     public static function resolve($type)

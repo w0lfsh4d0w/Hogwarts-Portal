@@ -2,4 +2,4 @@
 <?php
 
 
-return view('home.view.php' );
+return view('home' );

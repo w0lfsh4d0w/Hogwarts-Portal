@@ -1,5 +1,7 @@
 <?php
 include(base_path('views/partials/header.view.php'));
+
+$canManageAcademic = is_professor();
 ?>
 
 <div class="dashboard-container">
@@ -38,14 +40,16 @@ include(base_path('views/partials/header.view.php'));
                     </div>
                 </div>
 
-                <div class="action-buttons" style="margin-top: 30px;">
-                    <a href="/edit-course?id=<?php echo $course['course_id']; ?>" class="btn btn-submit">
-                        <i class="fa-solid fa-edit"></i> Edit Course
-                    </a>
-                    <a href="/delete-course?id=<?php echo $course['course_id']; ?>" class="btn btn-danger" style="background-color: #d32f2f; margin-left: 10px;">
-                        <i class="fa-solid fa-trash"></i> Delete Course
-                    </a>
-                </div>
+                <?php if ($canManageAcademic): ?>
+                    <div class="action-buttons" style="margin-top: 30px;">
+                        <a href="/edit-course?id=<?php echo $course['course_id']; ?>" class="btn btn-submit">
+                            <i class="fa-solid fa-edit"></i> Edit Course
+                        </a>
+                        <a href="/delete-course?id=<?php echo $course['course_id']; ?>" class="btn btn-danger" style="background-color: #d32f2f; margin-left: 10px;">
+                            <i class="fa-solid fa-trash"></i> Delete Course
+                        </a>
+                    </div>
+                <?php endif; ?>
             </section>
         </div>
     </div>

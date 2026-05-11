@@ -32,6 +32,6 @@ if (!$course) {
     abort(404);
 }
 
-return view('Dashboard/show-course.view.php', [
+return view('Dashboard/show-course', [
     'course' => $course,
 ]);

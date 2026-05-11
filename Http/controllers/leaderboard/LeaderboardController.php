@@ -29,7 +29,7 @@ $students = $db->query(
      LIMIT 10"
 )->get();
 
-view('leaderboard.view.php', [
+view('leaderboard', [
     'houses'   => $houses,
     'students' => $students,
 ]);

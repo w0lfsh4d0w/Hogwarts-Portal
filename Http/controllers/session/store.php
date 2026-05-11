@@ -21,4 +21,8 @@ if (($user['role'] ?? null) === 'Student') {
     redirect('/student-panel');
 }
 
+if (($user['role'] ?? null) === 'Professor') {
+    redirect('/dashboard');
+}
+
 redirect('/');

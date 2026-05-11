@@ -4,6 +4,15 @@
 use Core\App;
 
 $db = App::resolve('Core\Database');
+$currentProfessor = null;
+$courseFilterSql = '';
+$courseFilterParams = [];
+
+if (is_professor()) {
+    $currentProfessor = require_current_professor($db);
+    $courseFilterSql = ' WHERE Course.professor_id = :current_professor_id';
+    $courseFilterParams = ['current_professor_id' => $currentProfessor['professor_id']];
+}
 
 // Get all Students
 $Students = $db->query('SELECT 
@@ -52,9 +61,10 @@ $Courses = $db->query('SELECT
         LEFT JOIN Enrollment ON Course.course_id = Enrollment.course_id
         LEFT JOIN Assignment ON Course.course_id = Assignment.course_id
         LEFT JOIN Submission ON Assignment.assignment_id = Submission.assign_id
+        ' . $courseFilterSql . '
         GROUP BY Course.course_id, Course.course_name, Professor.professor_name, User.user_name
         ORDER BY Course.course_id DESC
-        ')->get();
+        ', $courseFilterParams)->get();
 
 // Get all Quizzes/Assignments
 $Assignments = $db->query('SELECT 
@@ -71,11 +81,12 @@ $Assignments = $db->query('SELECT
         JOIN Course ON Assignment.course_id = Course.course_id
         JOIN Professor ON Course.professor_id = Professor.professor_id
         LEFT JOIN Submission ON Assignment.assignment_id = Submission.assign_id
+        ' . $courseFilterSql . '
         GROUP BY Assignment.assignment_id, Assignment.title, Assignment.assignment_type, 
                  Course.course_name, Professor.professor_name, Assignment.max_points, 
                  Assignment.deadline, Assignment.created_at
         ORDER BY Assignment.created_at DESC
-        ')->get();
+        ', $courseFilterParams)->get();
 
 $quizCount = (int) $db->query('SELECT COUNT(*) as count FROM Assignment WHERE assignment_type = "Quiz"')->find()['count'];
 $taskCount = (int) $db->query('SELECT COUNT(*) as count FROM Assignment WHERE assignment_type = "Task"')->find()['count'];
@@ -107,11 +118,12 @@ $houseStats = $db->query('SELECT house_name, COUNT(Student.student_id) AS studen
         ORDER BY House.house_name
         ')->get();
 
-return view('Dashboard/dashboard.view.php', [
+return view('Dashboard/dashboard', [
     'Students' => $Students,
     'Professors' => $Professors,
     'Courses' => $Courses,
     'Assignments' => $Assignments,
     'stats' => $stats,
     'houseStats' => $houseStats,
+    'currentProfessor' => $currentProfessor,
 ]);
