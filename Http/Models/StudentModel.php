@@ -23,4 +23,19 @@ class StudentModel
         ]);
         return $this->db->connection->lastInsertId();
     }
+
+    public function findStudent($studentId)
+    {
+        return $this->db->query('SELECT * FROM Student WHERE student_id = :student_id', [
+            'student_id' => $studentId
+        ])->find();
+    }
+
+    public function deductBalance($studentId, $price)
+    {
+        $this->db->query('UPDATE Student SET balance = balance - :price WHERE student_id = :student_id', [
+            'student_id' => $studentId,
+            'price'      => $price
+        ]);
+    }
 }

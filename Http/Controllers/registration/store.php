@@ -8,12 +8,14 @@ use Http\Models\HouseModel;
 use Http\Models\StudentModel;
 use Core\Authenticator;
 use Core\Session;
+use Http\Models\WandModel;
 
 $db = App::resolve(Database::class);
 $name = $_POST['name'];
 $email = $_POST['email'];
 $password = $_POST['password'];
 $password_confirmation = $_POST['password_confirmation'];
+
 
 $errors = [];
 // check is not empty 
@@ -53,6 +55,15 @@ if ($existingUser) {
     $houseId = $houses[$randomIndex]['house_id'];
     $studentModel = new StudentModel();
     $studentId = $studentModel->CreateStudent($userId, $houseId);
+
+    $woods = ['Holly', 'Yew', 'Elder', 'Willow', 'Hawthorn', 'Oak'];
+    $cores = ['Phoenix Feather', 'Dragon Heartstring', 'Unicorn Hair', 'Thestral Tail Hair'];
+
+    $randomWood = $woods[array_rand($woods)];
+    $randomCore = $cores[array_rand($cores)];
+
+    $wandModel = new WandModel();
+    $wandModel->CreateWand($studentId, $randomWood, $randomCore);
     $auth = new Authenticator();
     $auth->login([
         'user_id'    => $userId,

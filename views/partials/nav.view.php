@@ -5,6 +5,7 @@ $userName = $user['user_name'] ?? 'Guest';
 $isStaff = is_staff();
 $header = $role === 'Professor' ? 'Professor Dashboard' : 'Dashboard';
 $request = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$isAuthenticated = isset($_SESSION['user']);
 $dashboardPages = [
   '/dashboard',
   '/show-student',
@@ -21,7 +22,6 @@ $dashboardPages = [
   '/edit-assignment',
   '/delete-assignment',
 ];
-// echo $request;
 
 if ($isStaff && in_array($request, $dashboardPages, true)) {
 ?>
@@ -55,12 +55,6 @@ if ($isStaff && in_array($request, $dashboardPages, true)) {
             <i class="fa-solid fa-house-chimney me-1"></i>
             <span>Home</span>
           </a>
-
-          <!-- Dashboard Sections (for future use) -->
-          <!-- <a class="nav-link magical-link active" href="/dashboard">
-            <i class="fa-solid fa-chart-line me-1"></i>
-            <span>Overview</span>
-          </a> -->
         </div>
 
         <!-- User Section -->
@@ -416,6 +410,18 @@ if ($isStaff && in_array($request, $dashboardPages, true)) {
             <i class="fa-solid fa-wand-magic-sparkles me-1"></i>
             <span>Services</span>
           </a>
+
+          <?php if ($isAuthenticated): ?>
+            <a class="nav-link magical-link <?php echo $request === '/shop' ? 'active' : ''; ?>" href="/shop">
+              <i class="fa-solid fa-store me-1"></i>
+              <span>Shop</span>
+            </a>
+
+            <a class="nav-link magical-link <?php echo $request === '/inventory' ? 'active' : ''; ?>" href="/inventory">
+              <i class="fa-solid fa-box-open me-1"></i>
+              <span>Inventory</span>
+            </a>
+          <?php endif; ?>
 
           <?php if ($role === 'Dumbledore'): ?>
             <a class="nav-link magical-link dashboard-link" href="/dashboard">

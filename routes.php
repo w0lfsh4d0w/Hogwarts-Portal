@@ -1,25 +1,30 @@
 <?php
-
-// $router->get('URI', 'CONTROLLER');;
-// $router->get('uri', 'controller')->only('auth');
-// $router->post('uri', 'controller')->only('guest');
-// $router->patch('uri', 'controller');
-// $router->delete('uri', 'controller')->only('auth');
-
-
-
+// Home
 $router->get('/', 'HomeController.php');
+
+// Registration
 $router->get('/register', 'registration/create.php')->only('guest');
 $router->post('/register', 'registration/store.php')->only('guest');
+
+// Session
 $router->get('/login', 'session/create.php')->only('guest');
 $router->post('/login', 'session/store.php')->only('guest');
-$router->get('/leaderboard', 'leaderboard/LeaderboardController.php');
 $router->get('/logout', 'session/destroy.php')->only('auth');
 $router->delete('/logout', 'session/destroy.php')->only('auth');
+
+// Student and professor panels
 $router->get('/student-panel', 'StudentPanelController.php')->only('auth');
 $router->post('/enroll-course', 'StoreEnrollmentController.php')->only('auth');
 $router->get('/professor-panel', 'ProfessorPanelController.php')->only('professor');
 
+// Shop and inventory
+$router->get('/shop', 'shop/index.php')->only('auth');
+$router->post('/shop/buy', 'shop/store.php')->only('auth');
+$router->get('/inventory', 'inventory/index.php')->only('auth');
+$router->post('/inventory/remove', 'inventory/store.php')->only('auth');
+
+// Leaderboard
+$router->get('/leaderboard', 'leaderboard/LeaderboardController.php');
 
 // ================== Dashboard Routes ==================
 $router->get('/dashboard', 'Dashboard/DashboardController.php')->only('staff');
