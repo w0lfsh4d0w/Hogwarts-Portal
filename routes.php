@@ -1,18 +1,20 @@
 <?php
+// Shop
+$router->get('/shop', 'shop/index.php')->only('auth');
+$router->post('/shop/buy', 'shop/store.php')->only('auth');
 
-// $router->get('URI', 'CONTROLLER');;
-// $router->get('uri', 'controller')->only('auth');
-// $router->post('uri', 'controller')->only('guest');
-// $router->patch('uri', 'controller');
-// $router->delete('uri', 'controller')->only('auth');
+// Inventory
+$router->get('/inventory', 'inventory/index.php')->only('auth');
+$router->post('/inventory/remove', 'inventory/store.php')->only('auth');
 
+// Registration
+$router->get('/register', 'registration/create.php')->only('guest');
+// $router->post('/register', 'registration/store.php')->only('guest');
 
-$router->get('/', 'HomeController@index');
+// Session
+$router->get('/login', 'session/create.php')->only('guest');
+$router->post('/login', 'session/store.php')->only('guest');
+$router->delete('/logout', 'session/destroy.php')->only('auth');
 
-$router->get('/shop', 'ShopController@index');
-
-$router->post('/shop/buy', 'ShopController@buy');
-
-$router->get('/inventory', 'InventoryController@index');
-
-$router->post('/inventory/remove', 'InventoryController@remove');
+// Home
+$router->get('/', 'HomeController.php');

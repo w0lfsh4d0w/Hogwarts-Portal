@@ -3,47 +3,41 @@
 use Core\Response;
 use Core\Session;
 
-function dd($data)
-{
+function dd($data){
     echo "<pre>";
     var_dump($data);
     echo "</pre>";
     die();
 }
 
-function active($path)
-{
-    return $_SERVER['REQUEST_URI'] === $path ? 'active' : '';
+function active($path) {
+    return $_SERVER['REQUEST_URI'] === $path ? 'bg-gray-900 text-white' : '';
 }
 
-function abort($code = 404)
-{
-    http_response_code($code);
-    require __DIR__ . "/../views/{$code}.php";
-    die();
-}
-
-function authorize($condition, $status = Response::FORBIDDEN)
-{
-    if (!$condition) {
-        abort($status);
+function abort($code = 404) {
+        http_response_code($code);
+        require base_path("views/{$code}.php");
+        die();
     }
+function authorize($condition, $status = Response::FORBIDDEN) {
+    if (! $condition)
+        abort($status);
 }
 
-function view($path, $attributes = [])
-{
+function base_path($path) {
+    return BASE_PATH . $path;
+}
+
+function view($path, $attributes = []) {
     extract($attributes);
-
-    require __DIR__ . "/../views/" . $path;
+    require base_path('views/' . $path . '.view.php');
 }
 
-function redirect($path)
-{
+function redirect($path) {
     header("Location: {$path}");
     exit();
 }
 
-function old($key, $default = '')
-{
-    return Session::get('old')[$key] ?? $default;
+function old($key, $default = ''){
+    return Session::get('old')[$key]?? $default;
 }
