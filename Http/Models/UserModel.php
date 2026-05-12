@@ -32,9 +32,9 @@ class UserModel
     public function findUserWithStudent($email)
     {
         return $this->db->query(
-            'SELECT User.*, Student.student_id, Student.house_id 
-         FROM User 
-         JOIN Student ON User.user_id = Student.user_id 
+            'SELECT User.*, Student.student_id, Student.house_id
+         FROM User
+         LEFT JOIN Student ON User.user_id = Student.user_id
          WHERE User.email = :email',
             ['email' => $email]
         )->find();

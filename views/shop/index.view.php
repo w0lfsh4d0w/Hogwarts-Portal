@@ -1,6 +1,6 @@
-<?php 
-include __DIR__ . '/../partials/header.view.php'; 
-include __DIR__ . '/../partials/nav.view.php'; 
+<?php
+include __DIR__ . '/../partials/header.view.php';
+include __DIR__ . '/../partials/nav.view.php';
 ?>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">

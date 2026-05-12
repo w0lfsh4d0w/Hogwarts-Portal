@@ -9,6 +9,6 @@ $items = $shopModel->getAllItems();
 
 view("shop/index", [
     'items'   => $items,
-    'errors'  => Session::get('errors'), 
-    'success' => Session::get('success')  
+    'errors'  => Session::get('errors'),
+    'success' => Session::get('success')
 ]);
