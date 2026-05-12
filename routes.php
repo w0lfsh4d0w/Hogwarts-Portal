@@ -13,15 +13,15 @@ $router->get('/logout', 'session/destroy.php')->only('auth');
 $router->delete('/logout', 'session/destroy.php')->only('auth');
 
 // Student and professor panels
-$router->get('/student-panel', 'StudentPanelController.php')->only('auth');
-$router->post('/enroll-course', 'StoreEnrollmentController.php')->only('auth');
+$router->get('/student-panel', 'StudentPanelController.php')->only('student');
+$router->post('/enroll-course', 'StoreEnrollmentController.php')->only('student');
 $router->get('/professor-panel', 'ProfessorPanelController.php')->only('professor');
 
 // Shop and inventory
-$router->get('/shop', 'shop/index.php')->only('auth');
-$router->post('/shop/buy', 'shop/store.php')->only('auth');
-$router->get('/inventory', 'inventory/index.php')->only('auth');
-$router->post('/inventory/remove', 'inventory/store.php')->only('auth');
+$router->get('/shop', 'shop/index.php')->only('student');
+$router->post('/shop/buy', 'shop/store.php')->only('student');
+$router->get('/inventory', 'inventory/index.php')->only('student');
+$router->post('/inventory/remove', 'inventory/store.php')->only('student');
 
 // Leaderboard
 $router->get('/leaderboard', 'leaderboard/LeaderboardController.php');

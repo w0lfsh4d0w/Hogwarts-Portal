@@ -21,7 +21,7 @@ class DashboardModel
 
         return [
             'Students' => $this->students($professorId),
-            'Professors' => $this->professors(),
+            'Professors' => $this->professors($professorId),
             'Courses' => $this->courses($professorId),
             'Assignments' => $this->assignments($professorId),
             'stats' => $this->stats($professorId),
@@ -78,8 +78,16 @@ class DashboardModel
         ', $params)->get();
     }
 
-    private function professors(): array
+    private function professors(?int $professorId): array
     {
+        $where = '';
+        $params = [];
+
+        if ($professorId) {
+            $where = 'WHERE Professor.professor_id = :professor_id';
+            $params['professor_id'] = $professorId;
+        }
+
         return $this->db->query('SELECT
                 Professor.professor_id,
                 User.user_name,
@@ -91,9 +99,10 @@ class DashboardModel
             JOIN User ON Professor.user_id = User.user_id
             LEFT JOIN Course ON Professor.professor_id = Course.professor_id
             LEFT JOIN Enrollment ON Course.course_id = Enrollment.course_id
+            ' . $where . '
             GROUP BY Professor.professor_id, User.user_name, User.email, Professor.professor_name
             ORDER BY Professor.professor_id DESC
-        ')->get();
+        ', $params)->get();
     }
 
     private function courses(?int $professorId): array
@@ -164,7 +173,7 @@ class DashboardModel
             'total_students' => $this->countStudents($professorId),
             'active_students' => $this->countStudents($professorId, 'Active'),
             'inactive_students' => $this->countStudents($professorId, 'Inactive'),
-            'total_professors' => $this->count('SELECT COUNT(*) AS count FROM Professor'),
+            'total_professors' => $professorId ? 1 : $this->count('SELECT COUNT(*) AS count FROM Professor'),
             'total_courses' => $this->countCourses($professorId),
             'total_enrollments' => $this->countEnrollments($professorId),
             'total_assignments' => $this->countAssignments($professorId),

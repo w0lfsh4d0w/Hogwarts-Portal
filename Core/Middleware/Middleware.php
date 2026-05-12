@@ -7,6 +7,7 @@ class Middleware
     public const MAP = [
         'auth' => Auth::class,
         'guest' => Guest::class,
+        'student' => Student::class,
         'dumbledore' => Dumbledore::class,
         'professor' => Professor::class,
         'staff' => Staff::class

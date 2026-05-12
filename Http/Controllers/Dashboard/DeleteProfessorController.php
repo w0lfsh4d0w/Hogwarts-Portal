@@ -4,6 +4,8 @@ use Core\App;
 
 $db = App::resolve('Core\Database');
 
+authorize(is_dumbledore());
+
 $professor_id = $_GET['id'] ?? null;
 
 if (!$professor_id) {
