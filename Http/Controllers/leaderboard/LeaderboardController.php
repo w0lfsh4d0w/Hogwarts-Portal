@@ -34,7 +34,7 @@ $students = $db->query('SELECT
         House.house_name AS house,
         COALESCE(work.work_completed, 0) AS work_completed,
         COALESCE(work.quizzes_completed, 0) AS quizzes_completed,
-        COALESCE(work.tasks_completed, 0) AS tasks_completed,
+        COALESCE(work.assignments_completed, 0) AS assignments_completed,
         COALESCE(work.total_points, 0) AS total_points,
         COALESCE(work.avg_score, 0) AS avg_score
         FROM Student
@@ -45,7 +45,7 @@ $students = $db->query('SELECT
                 Submission.student_id,
                 COUNT(DISTINCT Submission.submission_id) AS work_completed,
                 COUNT(DISTINCT CASE WHEN Assignment.assignment_type = "Quiz" THEN Submission.submission_id END) AS quizzes_completed,
-                COUNT(DISTINCT CASE WHEN Assignment.assignment_type = "Task" THEN Submission.submission_id END) AS tasks_completed,
+                COUNT(DISTINCT CASE WHEN Assignment.assignment_type = "Assignment" THEN Submission.submission_id END) AS assignments_completed,
                 SUM(Submission.score) AS total_points,
                 ROUND(AVG(Submission.score), 0) AS avg_score
             FROM Submission
