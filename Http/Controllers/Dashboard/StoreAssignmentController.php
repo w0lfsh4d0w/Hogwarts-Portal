@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $assignment_type = $_POST['assignment_type'] ?? '';
     $max_points = (int) ($_POST['max_points'] ?? 100);
     $deadline = $_POST['deadline'] ?? '';
-    $validTypes = ['Quiz', 'Task', 'Assignment'];
+    $validTypes = ['Quiz', 'Assignment'];
     $redirectTo = $assignment_type === 'Quiz' ? '/dashboard#quizzes' : '/dashboard#assignments';
 
     // Validate input

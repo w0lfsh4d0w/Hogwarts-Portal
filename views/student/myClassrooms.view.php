@@ -11,7 +11,7 @@
 
         <h1 class="text-center text-warning mb-5" style="font-family: 'Dancing Script', cursive;">My Classrooms</h1>
 
-        <h3 class="text-light border-bottom border-warning pb-2 mb-4">Pending Tasks & Quizzes</h3>
+        <h3 class="text-light border-bottom border-warning pb-2 mb-4">Pending Assignments & Quizzes</h3>
         <div class="row g-4 mb-5">
             <?php if (empty($assignments)): ?>
                 <p class="text-muted">You have no pending assignments. Great job!</p>

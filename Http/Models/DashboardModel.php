@@ -178,7 +178,6 @@ class DashboardModel
             'total_enrollments' => $this->countEnrollments($professorId),
             'total_assignments' => $this->countAssignments($professorId),
             'total_quizzes' => $this->countAssignments($professorId, 'Quiz'),
-            'total_tasks' => $this->countAssignments($professorId, 'Task'),
             'total_class_assignments' => $this->countAssignments($professorId, 'Assignment'),
             'active_quizzes' => $this->countAssignments($professorId, 'Quiz', true),
             'active_class_assignments' => $this->countAssignments($professorId, 'Assignment', true),

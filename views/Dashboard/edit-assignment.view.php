@@ -27,7 +27,6 @@ $deadlineValue = date('Y-m-d\TH:i', strtotime($assignment['deadline']));
                             <label>Type</label>
                             <select name="assignment_type" class="form-control" required>
                                 <option value="Quiz" <?php echo $assignment['assignment_type'] === 'Quiz' ? 'selected' : ''; ?>>Quiz</option>
-                                <option value="Task" <?php echo $assignment['assignment_type'] === 'Task' ? 'selected' : ''; ?>>Task</option>
                                 <option value="Assignment" <?php echo $assignment['assignment_type'] === 'Assignment' ? 'selected' : ''; ?>>Assignment</option>
                             </select>
                         </div>

@@ -114,7 +114,7 @@
                                 <th>Points</th>
                                 <th>Work</th>
                                 <th>Quizzes</th>
-                                <th>Tasks</th>
+                                <th>Assignments</th>
                                 <th>Avg Score</th>
                             </tr>
                         </thead>
@@ -157,7 +157,7 @@
                                 <td class="lb-pts-cell"><?= number_format($s['total_points']) ?></td>
                                 <td><?= (int) $s['work_completed'] ?></td>
                                 <td><?= $s['quizzes_completed'] ?></td>
-                                <td><?= (int) $s['tasks_completed'] ?></td>
+                                <td><?= (int) $s['assignments_completed'] ?></td>
                                 <td><span class="lb-score"><?= $s['avg_score'] ?>%</span></td>
                             </tr>
                             <?php endforeach; ?>
