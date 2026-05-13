@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $max_points = (int) ($_POST['max_points'] ?? 100);
     $deadline = $_POST['deadline'] ?? '';
 
-    if (!$title || !$course_id || !in_array($assignment_type, ['Quiz', 'Task'], true) || !$deadline || $max_points < 1) {
+    if (!$title || !$course_id || !in_array($assignment_type, ['Quiz', 'Task', 'Assignment'], true) || !$deadline || $max_points < 1) {
         redirect('/edit-assignment?id=' . $assignment_id);
     }
 

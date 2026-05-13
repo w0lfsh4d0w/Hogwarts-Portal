@@ -10,15 +10,20 @@
                 <th>Max Points</th>
                 <th>Status</th>
                 <th>Score</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
             <?php if (empty($assignments)): ?>
                 <tr>
-                    <td colspan="8">No work found for this section.</td>
+                    <td colspan="9">No work found for this section.</td>
                 </tr>
             <?php endif; ?>
             <?php foreach ($assignments as $assignment): ?>
+                <?php
+                    $isPending = $assignment['student_status'] === 'Pending';
+                    $deadlineHasPassed = strtotime($assignment['deadline']) < time();
+                ?>
                 <tr>
                     <td><?php echo htmlspecialchars($assignment['title']); ?></td>
                     <td><span class="badge badge-<?php echo strtolower($assignment['assignment_type']); ?>"><?php echo htmlspecialchars($assignment['assignment_type']); ?></span></td>
@@ -32,6 +37,20 @@
                             <?php echo $assignment['score']; ?>/<?php echo $assignment['max_points']; ?>
                         <?php else: ?>
                             -
+                        <?php endif; ?>
+                    </td>
+                    <td>
+                        <?php if ($isPending && !$deadlineHasPassed): ?>
+                            <form method="POST" action="/submit-work" class="student-submit-form">
+                                <input type="hidden" name="assignment_id" value="<?php echo $assignment['assignment_id']; ?>">
+                                <button type="submit" class="btn-action submit">
+                                    <i class="fa-solid fa-paper-plane"></i> Submit
+                                </button>
+                            </form>
+                        <?php elseif ($assignment['submission_id']): ?>
+                            <span class="submission-note">Done</span>
+                        <?php else: ?>
+                            <span class="submission-note">Closed</span>
                         <?php endif; ?>
                     </td>
                 </tr>

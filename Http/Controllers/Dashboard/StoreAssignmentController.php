@@ -12,10 +12,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $assignment_type = $_POST['assignment_type'] ?? '';
     $max_points = (int) ($_POST['max_points'] ?? 100);
     $deadline = $_POST['deadline'] ?? '';
+    $validTypes = ['Quiz', 'Task', 'Assignment'];
     $redirectTo = $assignment_type === 'Quiz' ? '/dashboard#quizzes' : '/dashboard#assignments';
 
     // Validate input
-    if (!$title || !$course_id || !in_array($assignment_type, ['Quiz', 'Task'], true) || !$deadline || $max_points < 1) {
+    if (!$title || !$course_id || !in_array($assignment_type, $validTypes, true) || !$deadline || $max_points < 1) {
         redirect($redirectTo);
     }
 

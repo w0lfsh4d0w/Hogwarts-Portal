@@ -4,7 +4,14 @@ include(base_path('views/partials/header.view.php'));
 $houseStudentCounts = array_column($houseStats ?? [], 'students_count', 'house_name');
 $canManageAcademic = is_professor();
 $canCreateProfessor = is_dumbledore();
-$dashboardActionVerb = $canManageAcademic ? 'Manage' : 'View';
+$academicActionVerb = $canManageAcademic ? 'Manage' : 'View';
+$professorActionVerb = $canCreateProfessor ? 'Manage' : 'View';
+$quizItems = array_values(array_filter($Assignments, function ($assignment) {
+    return $assignment['assignment_type'] === 'Quiz';
+}));
+$assignmentItems = array_values(array_filter($Assignments, function ($assignment) {
+    return $assignment['assignment_type'] === 'Assignment';
+}));
 ?>
 
 <div class="dashboard-container">
@@ -86,19 +93,19 @@ $dashboardActionVerb = $canManageAcademic ? 'Manage' : 'View';
                 <!-- Quick Actions -->
                 <div class="quick-actions">
                     <button class="btn btn-submit" onclick="showSection('students')">
-                        <i class="fa-solid fa-users"></i> <?php echo $dashboardActionVerb; ?> Students
+                        <i class="fa-solid fa-users"></i> <?php echo $academicActionVerb; ?> Students
                     </button>
                     <button class="btn btn-submit" onclick="showSection('professors')">
-                        <i class="fa-solid fa-chalkboard-user"></i> <?php echo $dashboardActionVerb; ?> Professors
+                        <i class="fa-solid fa-chalkboard-user"></i> <?php echo $professorActionVerb; ?> Professors
                     </button>
                     <button class="btn btn-submit" onclick="showSection('courses')">
-                        <i class="fa-solid fa-book"></i> <?php echo $dashboardActionVerb; ?> Courses
+                        <i class="fa-solid fa-book"></i> <?php echo $academicActionVerb; ?> Courses
                     </button>
                     <button class="btn btn-submit" onclick="showSection('quizzes')">
-                        <i class="fa-solid fa-question"></i> <?php echo $dashboardActionVerb; ?> Quizzes
+                        <i class="fa-solid fa-question"></i> <?php echo $academicActionVerb; ?> Quizzes
                     </button>
                     <button class="btn btn-submit" onclick="showSection('assignments')">
-                        <i class="fa-solid fa-tasks"></i> <?php echo $dashboardActionVerb; ?> Assignments
+                        <i class="fa-solid fa-tasks"></i> <?php echo $academicActionVerb; ?> Assignments
                     </button>
                 </div>
             </section>
@@ -195,6 +202,17 @@ $dashboardActionVerb = $canManageAcademic ? 'Manage' : 'View';
                                     <option value="Hufflepuff">Hufflepuff</option>
                                 </select>
                             </div>
+                            <div class="form-group">
+                                <label>Enroll In Course</label>
+                                <select name="course_id" class="form-control" required>
+                                    <option value="">Select Course</option>
+                                    <?php foreach ($Courses as $course): ?>
+                                        <option value="<?php echo $course['course_id']; ?>">
+                                            <?php echo htmlspecialchars($course['course_name']); ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group">
@@ -260,7 +278,7 @@ $dashboardActionVerb = $canManageAcademic ? 'Manage' : 'View';
                     </div>
                     <div class="stat-card">
                         <div class="stat-icon quizzes"><?php echo $stats['total_assignments']; ?></div>
-                        <p class="stat-label">Quizzes Created</p>
+                        <p class="stat-label">Academic Work</p>
                     </div>
                 </div>
 
@@ -289,6 +307,10 @@ $dashboardActionVerb = $canManageAcademic ? 'Manage' : 'View';
                                     <td><span class="badge active">Active</span></td>
                                     <td>
                                         <a href="/show-professor?id=<?php echo $prof['professor_id']; ?>" class="btn-action show">View</a>
+                                        <?php if ($canCreateProfessor): ?>
+                                            <a href="/edit-professor?id=<?php echo $prof['professor_id']; ?>" class="btn-action edit">Edit</a>
+                                            <a href="/delete-professor?id=<?php echo $prof['professor_id']; ?>" class="btn-action delete">Delete</a>
+                                        <?php endif; ?>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
@@ -463,8 +485,12 @@ $dashboardActionVerb = $canManageAcademic ? 'Manage' : 'View';
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach ($Assignments as $assign): 
-                                if ($assign['assignment_type'] === 'Quiz'): ?>
+                            <?php if (empty($quizItems)): ?>
+                                <tr>
+                                    <td colspan="8">No quizzes found.</td>
+                                </tr>
+                            <?php endif; ?>
+                            <?php foreach ($quizItems as $assign): ?>
                                 <tr>
                                     <td><?php echo $assign['assignment_id']; ?></td>
                                     <td><?php echo $assign['title']; ?></td>
@@ -481,8 +507,7 @@ $dashboardActionVerb = $canManageAcademic ? 'Manage' : 'View';
                                         <?php endif; ?>
                                     </td>
                                 </tr>
-                            <?php endif; 
-                            endforeach; ?>
+                            <?php endforeach; ?>
                         </tbody>
                     </table>
                 </div>
@@ -541,16 +566,12 @@ $dashboardActionVerb = $canManageAcademic ? 'Manage' : 'View';
                 <!-- Assignment Stats -->
                 <div class="stats-grid">
                     <div class="stat-card">
-                        <div class="stat-icon quizzes"><?php echo $stats['total_assignments']; ?></div>
+                        <div class="stat-icon assignments"><?php echo $stats['total_class_assignments']; ?></div>
                         <p class="stat-label">Total Assignments</p>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-icon active"><?php echo $stats['total_quizzes']; ?></div>
-                        <p class="stat-label">Quizzes</p>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon submissions"><?php echo $stats['total_tasks']; ?></div>
-                        <p class="stat-label">Tasks</p>
+                        <div class="stat-icon active"><?php echo $stats['active_class_assignments']; ?></div>
+                        <p class="stat-label">Open Assignments</p>
                     </div>
                     <div class="stat-card">
                         <div class="stat-icon submissions"><?php echo $stats['total_submissions']; ?></div>
@@ -558,7 +579,7 @@ $dashboardActionVerb = $canManageAcademic ? 'Manage' : 'View';
                     </div>
                     <div class="stat-card">
                         <div class="stat-icon points"><?php echo $stats['upcoming_deadlines']; ?></div>
-                        <p class="stat-label">Upcoming Deadlines</p>
+                        <p class="stat-label">All Upcoming Deadlines</p>
                     </div>
                 </div>
 
@@ -579,7 +600,12 @@ $dashboardActionVerb = $canManageAcademic ? 'Manage' : 'View';
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach ($Assignments as $assign): ?>
+                            <?php if (empty($assignmentItems)): ?>
+                                <tr>
+                                    <td colspan="9">No assignments found.</td>
+                                </tr>
+                            <?php endif; ?>
+                            <?php foreach ($assignmentItems as $assign): ?>
                                 <tr>
                                     <td><?php echo $assign['assignment_id']; ?></td>
                                     <td><?php echo $assign['title']; ?></td>
@@ -609,6 +635,7 @@ $dashboardActionVerb = $canManageAcademic ? 'Manage' : 'View';
                             <i class="fa-solid fa-plus"></i> Create New Assignment
                         </h4>
                         <form method="POST" action="/store-assignment" class="enroll-form">
+                        <input type="hidden" name="assignment_type" value="Assignment">
                         <div class="form-row">
                             <div class="form-group">
                                 <label>Assignment Title</label>
@@ -616,11 +643,7 @@ $dashboardActionVerb = $canManageAcademic ? 'Manage' : 'View';
                             </div>
                             <div class="form-group">
                                 <label>Type</label>
-                                <select name="assignment_type" class="form-control" required>
-                                    <option value="">Select Type...</option>
-                                    <option value="Quiz">Quiz</option>
-                                    <option value="Task">Task</option>
-                                </select>
+                                <input type="text" class="form-control" value="Assignment" disabled>
                             </div>
                             <div class="form-group">
                                 <label>Course</label>

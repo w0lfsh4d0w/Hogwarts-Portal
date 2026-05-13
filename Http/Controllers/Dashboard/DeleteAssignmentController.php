@@ -33,16 +33,25 @@ if (!$assignment) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $db->query('DELETE hp FROM HousePoints hp
-            JOIN Submission s ON hp.submission_id = s.submission_id
-            WHERE s.assign_id = :id
-        ', [
-        'id' => $assignment_id,
-    ]);
+    $db->connection->beginTransaction();
 
-    $db->query('DELETE FROM Assignment WHERE assignment_id = :id', [
-        'id' => $assignment_id,
-    ]);
+    try {
+        $db->query('DELETE hp FROM HousePoints hp
+                JOIN Submission s ON hp.submission_id = s.submission_id
+                WHERE s.assign_id = :id
+            ', [
+            'id' => $assignment_id,
+        ]);
+
+        $db->query('DELETE FROM Assignment WHERE assignment_id = :id', [
+            'id' => $assignment_id,
+        ]);
+
+        $db->connection->commit();
+    } catch (Throwable $exception) {
+        $db->connection->rollBack();
+        throw $exception;
+    }
 
     redirect('/dashboard');
 }

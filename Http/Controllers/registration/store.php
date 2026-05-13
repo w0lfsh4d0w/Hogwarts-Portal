@@ -25,8 +25,8 @@ if (!Validator::string($name, 1, 100)) {
 if (!Validator::email($email)) {
     $errors['email'] = 'Please provide a valid email address.';
 }
-if (!Validator::string($password, 8, 255)) {
-    $errors['password'] = 'Please provide a password at least eight characters.';
+if (!Validator::string($password, 6, 255)) {
+    $errors['password'] = 'Please provide a password at least sex characters.';
 }
 if ($password != $password_confirmation) {
     $errors['password_confirmation'] = 'Passwords must match';
