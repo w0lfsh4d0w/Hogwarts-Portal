@@ -14,6 +14,7 @@ $router->delete('/logout', 'session/destroy.php')->only('auth');
 
 // Student and professor panels
 $router->get('/student-panel', 'StudentPanelController.php')->only('student');
+$router->post('/submit-work', 'SubmissionController.php')->only('student');
 $router->get('/professor-panel', 'ProfessorPanelController.php')->only('professor');
 
 // Shop and inventory
@@ -43,6 +44,10 @@ $router->post('/delete-score', 'Dashboard/DeleteScoreController.php')->only('pro
 
 // Professors Routes
 $router->get('/show-professor', 'Dashboard/ShowProfessorController.php')->only('staff');
+$router->get('/edit-professor', 'Dashboard/EditProfessorController.php')->only('dumbledore');
+$router->post('/edit-professor', 'Dashboard/EditProfessorController.php')->only('dumbledore');
+$router->get('/delete-professor', 'Dashboard/DeleteProfessorController.php')->only('dumbledore');
+$router->post('/delete-professor', 'Dashboard/DeleteProfessorController.php')->only('dumbledore');
 
 // Courses Routes
 $router->get('/show-course', 'Dashboard/ShowCourseController.php')->only('staff');

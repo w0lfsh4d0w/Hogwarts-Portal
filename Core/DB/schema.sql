@@ -89,7 +89,7 @@ CREATE TABLE Enrollment (
 CREATE TABLE Assignment (
     assignment_id   INT AUTO_INCREMENT PRIMARY KEY,
     course_id       INT          NOT NULL,
-    assignment_type ENUM('Quiz', 'Task') NOT NULL,
+    assignment_type ENUM('Quiz', 'Assignment') NOT NULL,
     title           VARCHAR(200) NOT NULL,
     max_points      INT          NOT NULL DEFAULT 100,
     created_at      TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,

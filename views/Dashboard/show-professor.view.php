@@ -1,5 +1,7 @@
 <?php
 include(base_path('views/partials/header.view.php'));
+
+$canManageProfessor = is_dumbledore();
 ?>
 
 <div class="dashboard-container">
@@ -55,6 +57,17 @@ include(base_path('views/partials/header.view.php'));
                         <?php endforeach; ?>
                     </tbody>
                 </table>
+
+                <?php if ($canManageProfessor): ?>
+                    <div class="action-buttons" style="margin-top: 30px;">
+                        <a href="/edit-professor?id=<?php echo $professor['professor_id']; ?>" class="btn btn-submit">
+                            <i class="fa-solid fa-edit"></i> Edit Professor
+                        </a>
+                        <a href="/delete-professor?id=<?php echo $professor['professor_id']; ?>" class="btn btn-danger" style="background-color: #d32f2f; margin-left: 10px;">
+                            <i class="fa-solid fa-trash"></i> Delete Professor
+                        </a>
+                    </div>
+                <?php endif; ?>
 
             </section>
         </div>

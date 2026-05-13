@@ -29,10 +29,6 @@ function studentPanelStatusClass($status)
                 <i class="fa-solid fa-circle-question"></i>
                 <span>Quizzes</span>
             </a>
-            <a href="#tasks" class="sidebar-link" data-section="tasks">
-                <i class="fa-solid fa-scroll"></i>
-                <span>Tasks</span>
-            </a>
             <a href="/" class="sidebar-link">
                 <i class="fa-solid fa-house"></i>
                 <span>Home</span>
@@ -54,6 +50,12 @@ function studentPanelStatusClass($status)
 
         <div class="dashboard-content">
             <section id="overview-section" class="dashboard-section active">
+                <?php if (\Core\Session::has('submission_message')): ?>
+                    <div class="alert-magic-success student-alert">
+                        <?php echo htmlspecialchars(\Core\Session::get('submission_message')); ?>
+                    </div>
+                <?php endif; ?>
+
                 <h3 class="section-title">
                     <i class="fa-solid fa-user-graduate"></i> My Control Panel
                 </h3>
@@ -85,8 +87,8 @@ function studentPanelStatusClass($status)
                         <p class="stat-label">Quizzes</p>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-icon submissions"><?php echo $stats['tasks']; ?></div>
-                        <p class="stat-label">Tasks</p>
+                        <div class="stat-icon assignments"><?php echo $stats['class_assignments']; ?></div>
+                        <p class="stat-label">Assignments</p>
                     </div>
                     <div class="stat-card">
                         <div class="stat-icon points"><?php echo $stats['average_score']; ?>%</div>
@@ -270,10 +272,15 @@ function studentPanelStatusClass($status)
             </section>
 
             <section id="assignments-section" class="dashboard-section">
+                <?php if (\Core\Session::has('submission_message')): ?>
+                    <div class="alert-magic-success student-alert">
+                        <?php echo htmlspecialchars(\Core\Session::get('submission_message')); ?>
+                    </div>
+                <?php endif; ?>
                 <h3 class="section-title">
-                    <i class="fa-solid fa-list-check"></i> All Assignments
+                    <i class="fa-solid fa-list-check"></i> My Assignments
                 </h3>
-                <?php include(base_path('views/partials/student-work-table.view.php')); ?>
+                <?php $assignments = $classAssignments; include(base_path('views/partials/student-work-table.view.php')); ?>
             </section>
 
             <section id="quizzes-section" class="dashboard-section">
@@ -283,12 +290,6 @@ function studentPanelStatusClass($status)
                 <?php $assignments = $quizzes; include(base_path('views/partials/student-work-table.view.php')); ?>
             </section>
 
-            <section id="tasks-section" class="dashboard-section">
-                <h3 class="section-title">
-                    <i class="fa-solid fa-scroll"></i> My Tasks
-                </h3>
-                <?php $assignments = $tasks; include(base_path('views/partials/student-work-table.view.php')); ?>
-            </section>
         </div>
     </div>
 </div>
@@ -312,9 +313,8 @@ function studentPanelStatusClass($status)
         const titles = {
             overview: 'Student Overview',
             courses: 'Registered Courses',
-            assignments: 'All Assignments',
-            quizzes: 'My Quizzes',
-            tasks: 'My Tasks'
+            assignments: 'My Assignments',
+            quizzes: 'My Quizzes'
         };
 
         document.getElementById('page-title').textContent = titles[sectionName] || 'Student Panel';

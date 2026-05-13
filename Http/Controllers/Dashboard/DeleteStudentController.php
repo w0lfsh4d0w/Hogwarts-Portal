@@ -31,13 +31,22 @@ if (!$student) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $db->query('DELETE FROM HousePoints WHERE student_id = :student_id', [
-        'student_id' => $student_id,
-    ]);
+    $db->connection->beginTransaction();
 
-    $db->query('DELETE FROM User WHERE user_id = :user_id', [
-        'user_id' => $student['user_id'],
-    ]);
+    try {
+        $db->query('DELETE FROM HousePoints WHERE student_id = :student_id', [
+            'student_id' => $student_id,
+        ]);
+
+        $db->query('DELETE FROM User WHERE user_id = :user_id', [
+            'user_id' => $student['user_id'],
+        ]);
+
+        $db->connection->commit();
+    } catch (Throwable $exception) {
+        $db->connection->rollBack();
+        throw $exception;
+    }
 
     redirect('/dashboard');
 }

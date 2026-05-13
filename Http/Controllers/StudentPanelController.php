@@ -106,6 +106,10 @@ $tasks = array_values(array_filter($assignments, function ($assignment) {
     return $assignment['assignment_type'] === 'Task';
 }));
 
+$classAssignments = array_values(array_filter($assignments, function ($assignment) {
+    return $assignment['assignment_type'] === 'Assignment';
+}));
+
 $submittedAssignments = array_filter($assignments, function ($assignment) {
     return $assignment['submission_id'] !== null;
 });
@@ -133,6 +137,7 @@ $stats = [
     'assignments' => count($assignments),
     'quizzes' => count($quizzes),
     'tasks' => count($tasks),
+    'class_assignments' => count($classAssignments),
     'submitted' => count($submittedAssignments),
     'pending' => count($pendingAssignments),
     'overdue' => count($overdueAssignments),
@@ -146,5 +151,9 @@ return view('student-panel', [
     'assignments' => $assignments,
     'quizzes' => $quizzes,
     'tasks' => $tasks,
+    'classAssignments' => $classAssignments,
+    'pendingAssignments' => $pendingAssignments,
+    'submittedAssignments' => $submittedAssignments,
+    'overdueAssignments' => $overdueAssignments,
     'stats' => $stats,
 ]);
