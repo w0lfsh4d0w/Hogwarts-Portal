@@ -49,8 +49,8 @@
                     id="password"
                     name="password"
                     class="form-control <?= isset($errors['password']) ? 'is-invalid' : '' ?>"
-                    placeholder="Min. 8 characters"
-                    minlength="8"
+                    placeholder="Min. 6 characters"
+                    minlength="6"
                     required
                 >
                 <?php if (isset($errors['password'])): ?>

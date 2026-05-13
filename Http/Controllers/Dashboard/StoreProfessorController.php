@@ -22,27 +22,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         redirect($redirectTo);
     }
 
-    // Insert User
-    $db->query(
-        'INSERT INTO User (user_name, email, password, role) VALUES (:name, :email, :password, :role)',
-        [
-            'name' => $user_name,
-            'email' => $email,
-            'password' => password_hash($password, PASSWORD_BCRYPT),
-            'role' => 'Professor'
-        ]
-    );
+    $db->connection->beginTransaction();
 
-    $user_id = $db->connection->lastInsertId();
+    try {
+        // Insert User
+        $db->query(
+            'INSERT INTO User (user_name, email, password, role) VALUES (:name, :email, :password, :role)',
+            [
+                'name' => $user_name,
+                'email' => $email,
+                'password' => password_hash($password, PASSWORD_BCRYPT),
+                'role' => 'Professor'
+            ]
+        );
 
-    // Insert Professor
-    $db->query(
-        'INSERT INTO Professor (user_id, professor_name) VALUES (:user_id, :professor_name)',
-        [
-            'user_id' => $user_id,
-            'professor_name' => $professor_name
-        ]
-    );
+        $user_id = $db->connection->lastInsertId();
+
+        // Insert Professor
+        $db->query(
+            'INSERT INTO Professor (user_id, professor_name) VALUES (:user_id, :professor_name)',
+            [
+                'user_id' => $user_id,
+                'professor_name' => $professor_name
+            ]
+        );
+
+        $db->connection->commit();
+    } catch (Throwable $exception) {
+        $db->connection->rollBack();
+        throw $exception;
+    }
 
     redirect($redirectTo);
 }

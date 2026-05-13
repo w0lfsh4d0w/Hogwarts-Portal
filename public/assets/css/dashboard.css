@@ -231,6 +231,10 @@
   background: linear-gradient(135deg, #FAB1A0 0%, #E17055 100%);
 }
 
+.stat-icon.assignments {
+  background: linear-gradient(135deg, #946B2D 0%, #6f4f22 100%);
+}
+
 .stat-icon.gryffindor {
   background: linear-gradient(135deg, #D63031 0%, #B91C1C 100%);
 }
@@ -480,6 +484,16 @@
   text-transform: uppercase;
 }
 
+.badge-assignment {
+  background: linear-gradient(135deg, #946B2D 0%, #6f4f22 100%);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
 /* ========= Action Buttons ========= */
 .btn-action {
   padding: 6px 12px;
@@ -508,6 +522,33 @@
 
 .btn-action.edit:hover {
   background-color: #1e7e34;
+}
+
+.btn-action.submit {
+  background-color: #0E1A40;
+  color: #FFD700;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-action.submit:hover {
+  background-color: #946B2D;
+  color: white;
+}
+
+.student-submit-form {
+  margin: 0;
+}
+
+.submission-note {
+  color: #666;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.student-alert {
+  margin-bottom: 20px;
 }
 
 .btn-action.delete {
