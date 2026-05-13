@@ -5,7 +5,7 @@ $canManageAcademic = is_professor();
 ?>
 
 <div class="dashboard-container">
-    <div class="main-content">
+    <div class="main-content mx-auto">
         <div class="top-bar">
             <h2 id="page-title">Student Details</h2>
             <div class="top-bar-actions">
