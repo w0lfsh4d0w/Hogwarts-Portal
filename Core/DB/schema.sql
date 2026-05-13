@@ -32,9 +32,8 @@ CREATE TABLE Student (
         ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
--- =============================================
+
 -- 4. Professor
--- =============================================
 CREATE TABLE Professor (
     professor_id    INT AUTO_INCREMENT PRIMARY KEY,
     user_id         INT          NOT NULL UNIQUE,
@@ -44,9 +43,8 @@ CREATE TABLE Professor (
         ON DELETE CASCADE ON UPDATE CASCADE
 );
 
--- =============================================
+
 -- 5. Wand
--- =============================================
 CREATE TABLE Wand (
     wand_id     INT AUTO_INCREMENT PRIMARY KEY,
     student_id  INT NOT NULL UNIQUE,
@@ -58,9 +56,8 @@ CREATE TABLE Wand (
         ON DELETE CASCADE ON UPDATE CASCADE
 );
 
--- =============================================
+
 -- 6. Course
--- =============================================
 CREATE TABLE Course (
     course_id       INT AUTO_INCREMENT PRIMARY KEY,
     course_name     VARCHAR(150) NOT NULL,
@@ -70,9 +67,8 @@ CREATE TABLE Course (
         ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
--- =============================================
+
 -- 7. Enrollment
--- =============================================
 CREATE TABLE Enrollment (
     enroll_id       INT AUTO_INCREMENT PRIMARY KEY,
     student_id      INT NOT NULL,
@@ -88,9 +84,8 @@ CREATE TABLE Enrollment (
         ON DELETE CASCADE ON UPDATE CASCADE
 );
 
--- =============================================
+
 -- 8. Assignment
--- =============================================
 CREATE TABLE Assignment (
     assignment_id   INT AUTO_INCREMENT PRIMARY KEY,
     course_id       INT          NOT NULL,
@@ -104,9 +99,8 @@ CREATE TABLE Assignment (
         ON DELETE CASCADE ON UPDATE CASCADE
 );
 
--- =============================================
+
 -- 9. Submission
--- =============================================
 CREATE TABLE Submission (
     submission_id   INT AUTO_INCREMENT PRIMARY KEY,
     assign_id       INT NOT NULL,
@@ -124,9 +118,8 @@ CREATE TABLE Submission (
         ON DELETE CASCADE ON UPDATE CASCADE
 );
 
--- =============================================
+
 -- 10. HousePoints
--- =============================================
 CREATE TABLE HousePoints (
     points_id       INT AUTO_INCREMENT PRIMARY KEY,
     house_id        INT NOT NULL,
@@ -145,9 +138,8 @@ CREATE TABLE HousePoints (
         ON DELETE CASCADE ON UPDATE CASCADE
 );
 
--- =============================================
+
 -- 11. DiagonAlleyShop
--- =============================================
 CREATE TABLE DiagonAlleyShop (
     item_id     INT AUTO_INCREMENT PRIMARY KEY,
     item_name   VARCHAR(150)  NOT NULL,
@@ -155,9 +147,8 @@ CREATE TABLE DiagonAlleyShop (
     item_price  DECIMAL(10,2) NOT NULL
 );
 
--- =============================================
+
 -- 12. Inventory
--- =============================================
 CREATE TABLE Inventory (
     inventory_id    INT AUTO_INCREMENT PRIMARY KEY,
     student_id      INT NOT NULL,
@@ -172,9 +163,8 @@ CREATE TABLE Inventory (
         ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
--- =============================================
+
 -- 13. Message
--- =============================================
 CREATE TABLE Message (
     message_id      INT AUTO_INCREMENT PRIMARY KEY,
     sender_id       INT     NOT NULL,
@@ -191,7 +181,6 @@ CREATE TABLE Message (
 );
 
 -- Indexes
-
 CREATE INDEX idx_student_house     ON Student(house_id);
 CREATE INDEX idx_course_professor  ON Course(professor_id);
 CREATE INDEX idx_enrollment_course ON Enrollment(course_id);
@@ -235,9 +224,8 @@ INSERT INTO House (house_name, total_points) VALUES
     ('Ravenclaw',  0),
     ('Hufflepuff', 0);
 
--- =============================================
+
 -- SEED DATA: Shop Items
--- =============================================
 INSERT INTO DiagonAlleyShop (item_name, item_type, item_price) VALUES
     ('Nimbus 2000',                 'Broom',              500.00),
     ('Firebolt',                    'Broom',              1200.00),
@@ -247,11 +235,10 @@ INSERT INTO DiagonAlleyShop (item_name, item_type, item_price) VALUES
     ('Dark Magic (PHP)',            'Spell Book',         999.00);
 
 
--- =============================================
--- Insert data for Leaderboard
--- =============================================
 
-    -- Users
+-- Insert data for Leaderboard
+
+-- Users
 INSERT INTO User (user_name, email, password, role) VALUES
 ('Harry James Potter', 'harry@gryffindor.edu', '123456', 'Student'),
 ('Hermione Jean Granger', 'hermione@gryffindor.edu', '123456', 'Student'),
