@@ -5,7 +5,7 @@ $deadlineValue = date('Y-m-d\TH:i', strtotime($assignment['deadline']));
 ?>
 
 <div class="dashboard-container">
-    <div class="main-content">
+    <div class="main-content mx-auto">
         <div class="top-bar">
             <h2 id="page-title">Edit Assignment</h2>
             <div class="top-bar-actions">
