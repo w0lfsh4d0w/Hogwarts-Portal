@@ -14,7 +14,6 @@ $router->delete('/logout', 'session/destroy.php')->only('auth');
 
 // Student and professor panels
 $router->get('/student-panel', 'StudentPanelController.php')->only('student');
-$router->post('/enroll-course', 'StoreEnrollmentController.php')->only('student');
 $router->post('/submit-work', 'SubmissionController.php')->only('student');
 $router->get('/professor-panel', 'ProfessorPanelController.php')->only('professor');
 
@@ -63,3 +62,12 @@ $router->get('/edit-assignment', 'Dashboard/EditAssignmentController.php')->only
 $router->post('/edit-assignment', 'Dashboard/EditAssignmentController.php')->only('professor');
 $router->get('/delete-assignment', 'Dashboard/DeleteAssignmentController.php')->only('professor');
 $router->post('/delete-assignment', 'Dashboard/DeleteAssignmentController.php')->only('professor');
+
+// ================== Classrooms Routes ==================
+
+// Classrooms & Quizzes (Students)
+$router->get('/course-catalog', 'student/courseCatalog.php')->only('student');
+$router->post('/enroll-course', 'student/enroll.php')->only('student');
+$router->get('/my-classrooms', 'student/myClassrooms.php')->only('student');
+$router->get('/take-quiz', 'student/startQuiz.php')->only('student');
+$router->post('/submit-quiz', 'student/submitQuiz.php')->only('student');
