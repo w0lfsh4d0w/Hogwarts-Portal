@@ -1,7 +1,7 @@
 <?php
 include(base_path('views/partials/header.view.php'));
 
-$canManageAcademic = is_professor();
+$canManageAcademic = is_staff();
 ?>
 
 <div class="dashboard-container">
@@ -9,7 +9,7 @@ $canManageAcademic = is_professor();
         <div class="top-bar">
             <h2 id="page-title">Student Details</h2>
             <div class="top-bar-actions">
-                <a href="/dashboard" class="btn btn-bronze">Back to Dashboard</a>
+                <a href="/classrooms#students" class="btn btn-bronze">Back to Classrooms</a>
             </div>
         </div>
 

@@ -7,7 +7,7 @@ include(base_path('views/partials/header.view.php'));
         <div class="top-bar">
             <h2 id="page-title">Deactivate Student</h2>
             <div class="top-bar-actions">
-                <a href="/dashboard" class="btn btn-bronze">Back to Dashboard</a>
+                <a href="/classrooms#students" class="btn btn-bronze">Back to Classrooms</a>
             </div>
         </div>
 
@@ -32,7 +32,7 @@ include(base_path('views/partials/header.view.php'));
                     <button type="submit" class="btn btn-danger" style="background-color: #d32f2f;">
                         <i class="fa-solid fa-check"></i> Confirm Deactivation
                     </button>
-                    <a href="/dashboard" class="btn btn-bronze" style="margin-left: 10px;">
+                    <a href="/classrooms#students" class="btn btn-bronze" style="margin-left: 10px;">
                         Cancel
                     </a>
                 </form>

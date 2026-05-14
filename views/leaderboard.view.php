@@ -19,17 +19,9 @@
                 <i class="fa-solid fa-chalkboard-user"></i>
                 <span>Professors</span>
             </a>
-            <a href="/dashboard#courses" class="sidebar-link" data-section="courses">
-                <i class="fa-solid fa-book"></i>
-                <span>Courses</span>
-            </a>
-            <a href="/dashboard#quizzes" class="sidebar-link" data-section="quizzes">
-                <i class="fa-solid fa-question"></i>
-                <span>Quizzes</span>
-            </a>
-            <a href="/dashboard#assignments" class="sidebar-link" data-section="assignments">
-                <i class="fa-solid fa-tasks"></i>
-                <span>Assignments</span>
+            <a href="/classrooms" class="sidebar-link">
+                <i class="fa-solid fa-chalkboard"></i>
+                <span>Classrooms</span>
             </a>
             <a href="/leaderboard" class="sidebar-link active">
                 <i class="fa-solid fa-trophy"></i>

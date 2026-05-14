@@ -55,6 +55,11 @@ if ($isStaff && in_array($request, $dashboardPages, true)) {
             <i class="fa-solid fa-house-chimney me-1"></i>
             <span>Home</span>
           </a>
+
+          <a class="nav-link magical-link" href="/classrooms">
+            <i class="fa-solid fa-chalkboard me-1"></i>
+            <span>Classrooms</span>
+          </a>
         </div>
 
         <!-- User Section -->
@@ -456,6 +461,13 @@ if ($isStaff && in_array($request, $dashboardPages, true)) {
             <i class="fa-solid fa-wand-magic-sparkles me-1"></i>
             <span>Services</span>
           </a>
+
+          <?php if ($isAuthenticated): ?>
+            <a class="nav-link magical-link" href="/classrooms">
+              <i class="fa-solid fa-chalkboard me-1"></i>
+              <span>Classrooms</span>
+            </a>
+          <?php endif; ?>
 
           <?php if ($isAuthenticated && $role === 'Student'): ?>
             <a class="nav-link magical-link" href="/shop">

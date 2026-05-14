@@ -7,9 +7,14 @@ $db = App::resolve('Core\Database');
 
 $assignmentId = $_POST['assignment_id'] ?? null;
 $userId = current_user()['user_id'] ?? null;
+$redirectTo = $_POST['redirect_to'] ?? '/student-panel#assignments';
+
+if (!is_string($redirectTo) || strpos($redirectTo, '/') !== 0) {
+    $redirectTo = '/student-panel#assignments';
+}
 
 if (!$assignmentId || !$userId) {
-    redirect('/student-panel#assignments');
+    redirect($redirectTo);
 }
 
 $student = $db->query('SELECT student_id, house_id
@@ -56,12 +61,12 @@ $existingSubmission = $db->query('SELECT submission_id
 
 if ($existingSubmission) {
     Session::flash('submission_message', 'This work has already been submitted.');
-    redirect('/student-panel#assignments');
+    redirect($redirectTo);
 }
 
 if (strtotime($assignment['deadline']) < time()) {
     Session::flash('submission_message', 'The deadline has passed, so this work can no longer earn house points.');
-    redirect('/student-panel#assignments');
+    redirect($redirectTo);
 }
 
 $points = (int) $assignment['max_points'];
@@ -95,4 +100,4 @@ try {
 }
 
 Session::flash('submission_message', 'Submitted on time. ' . $points . ' points were awarded to your house.');
-redirect('/student-panel#assignments');
+redirect($redirectTo);

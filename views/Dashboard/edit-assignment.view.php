@@ -2,6 +2,7 @@
 include(base_path('views/partials/header.view.php'));
 
 $deadlineValue = date('Y-m-d\TH:i', strtotime($assignment['deadline']));
+$backTarget = $assignment['assignment_type'] === 'Quiz' ? '/classrooms#quizzes' : '/classrooms#assignments';
 ?>
 
 <div class="dashboard-container">
@@ -9,7 +10,7 @@ $deadlineValue = date('Y-m-d\TH:i', strtotime($assignment['deadline']));
         <div class="top-bar">
             <h2 id="page-title">Edit Assignment</h2>
             <div class="top-bar-actions">
-                <a href="/dashboard" class="btn btn-bronze">Back to Dashboard</a>
+                <a href="<?php echo $backTarget; ?>" class="btn btn-bronze">Back to Classrooms</a>
             </div>
         </div>
 
