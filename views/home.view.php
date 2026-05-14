@@ -26,7 +26,7 @@ include 'partials/nav.view.php';
                             Submit Work
                         </a>
                     <?php elseif (is_staff()): ?>
-                        <a href="/dashboard#assignments" class="hero-button primary">
+                        <a href="/classrooms" class="hero-button primary">
                             <i class="fa-solid fa-wand-magic-sparkles"></i>
                             Manage Classes
                         </a>

@@ -1,8 +1,4 @@
 <div class="table-container">
-    <?php
-    $actionTarget = $studentPanelActionTarget ?? '/classrooms';
-    $actionLabel = $studentPanelActionLabel ?? 'Open Classrooms';
-    ?>
     <table class="dashboard-table">
         <thead>
             <tr>
@@ -18,12 +14,12 @@
             </tr>
         </thead>
         <tbody>
-            <?php if (empty($assignments)): ?>
+            <?php if (empty($classroomWorkItems)): ?>
                 <tr>
                     <td colspan="9">No work found for this section.</td>
                 </tr>
             <?php endif; ?>
-            <?php foreach ($assignments as $assignment): ?>
+            <?php foreach ($classroomWorkItems as $assignment): ?>
                 <?php
                     $isPending = $assignment['student_status'] === 'Pending';
                     $deadlineHasPassed = strtotime($assignment['deadline']) < time();
@@ -35,7 +31,7 @@
                     <td><?php echo htmlspecialchars($assignment['professor_name']); ?></td>
                     <td><?php echo date('Y-m-d H:i', strtotime($assignment['deadline'])); ?></td>
                     <td><?php echo $assignment['max_points']; ?></td>
-                    <td><span class="badge <?php echo studentPanelStatusClass($assignment['student_status']); ?>"><?php echo htmlspecialchars($assignment['student_status']); ?></span></td>
+                    <td><span class="badge <?php echo classroomsStatusClass($assignment['student_status']); ?>"><?php echo htmlspecialchars($assignment['student_status']); ?></span></td>
                     <td>
                         <?php if ($assignment['submission_id']): ?>
                             <?php echo $assignment['score']; ?>/<?php echo $assignment['max_points']; ?>
@@ -45,9 +41,13 @@
                     </td>
                     <td>
                         <?php if ($isPending && !$deadlineHasPassed): ?>
-                            <a href="<?php echo $actionTarget; ?>" class="btn-action submit">
-                                <i class="fa-solid fa-arrow-up-right-from-square"></i> <?php echo htmlspecialchars($actionLabel); ?>
-                            </a>
+                            <form method="POST" action="/submit-work" class="student-submit-form">
+                                <input type="hidden" name="assignment_id" value="<?php echo $assignment['assignment_id']; ?>">
+                                <input type="hidden" name="redirect_to" value="<?php echo htmlspecialchars($classroomWorkRedirect); ?>">
+                                <button type="submit" class="btn-action submit">
+                                    <i class="fa-solid fa-paper-plane"></i> Submit
+                                </button>
+                            </form>
                         <?php elseif ($assignment['submission_id']): ?>
                             <span class="submission-note">Done</span>
                         <?php else: ?>

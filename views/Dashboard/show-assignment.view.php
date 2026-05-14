@@ -1,7 +1,8 @@
 <?php
 include(base_path('views/partials/header.view.php'));
 
-$canManageAcademic = is_professor();
+$canManageAcademic = is_staff();
+$backTarget = $assignment['assignment_type'] === 'Quiz' ? '/classrooms#quizzes' : '/classrooms#assignments';
 ?>
 
 <div class="dashboard-container">
@@ -9,7 +10,7 @@ $canManageAcademic = is_professor();
         <div class="top-bar">
             <h2 id="page-title">Assignment Details</h2>
             <div class="top-bar-actions">
-                <a href="/dashboard" class="btn btn-bronze">Back to Dashboard</a>
+                <a href="<?php echo $backTarget; ?>" class="btn btn-bronze">Back to Classrooms</a>
             </div>
         </div>
 

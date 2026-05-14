@@ -3,7 +3,12 @@
 use Core\App;
 
 $db = App::resolve('Core\Database');
-$professor = require_current_professor($db);
+$isSuperAdmin = is_dumbledore();
+$professor = null;
+
+if (!$isSuperAdmin) {
+    $professor = require_current_professor($db);
+}
 
 $course_id = $_GET['id'] ?? null;
 
@@ -11,7 +16,7 @@ if (!$course_id) {
     abort(400);
 }
 
-$course = $db->query('SELECT
+$courseQuery = 'SELECT
         Course.course_id,
         Course.course_name,
         Professor.professor_name,
@@ -21,13 +26,16 @@ $course = $db->query('SELECT
         JOIN Professor ON Course.professor_id = Professor.professor_id
         LEFT JOIN Enrollment ON Course.course_id = Enrollment.course_id
         LEFT JOIN Assignment ON Course.course_id = Assignment.course_id
-        WHERE Course.course_id = :id
-            AND Course.professor_id = :professor_id
-        GROUP BY Course.course_id, Course.course_name, Professor.professor_name
-        ', [
-    'id' => $course_id,
-    'professor_id' => $professor['professor_id'],
-])->find();
+        WHERE Course.course_id = :id';
+$courseParams = ['id' => $course_id];
+
+if (!$isSuperAdmin) {
+    $courseQuery .= ' AND Course.professor_id = :professor_id';
+    $courseParams['professor_id'] = $professor['professor_id'];
+}
+
+$courseQuery .= ' GROUP BY Course.course_id, Course.course_name, Professor.professor_name';
+$course = $db->query($courseQuery, $courseParams)->find();
 
 if (!$course) {
     abort(404);
@@ -55,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         throw $exception;
     }
 
-    redirect('/dashboard');
+    redirect('/classrooms#courses');
 }
 
 return view('Dashboard/delete-course', [

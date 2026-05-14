@@ -10,11 +10,6 @@ if (!$student_id) {
     abort(400);
 }
 
-if (is_professor()) {
-    $professor = require_current_professor($db);
-    authorize(professor_owns_student($db, $student_id, $professor['professor_id']));
-}
-
 $student = $db->query('SELECT 
     Student.student_id, 
     User.user_name, 

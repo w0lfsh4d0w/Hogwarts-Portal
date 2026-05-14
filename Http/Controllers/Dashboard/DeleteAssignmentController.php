@@ -3,7 +3,12 @@
 use Core\App;
 
 $db = App::resolve('Core\Database');
-$professor = require_current_professor($db);
+$isSuperAdmin = is_dumbledore();
+$professor = null;
+
+if (!$isSuperAdmin) {
+    $professor = require_current_professor($db);
+}
 
 $assignment_id = $_GET['id'] ?? null;
 
@@ -11,7 +16,7 @@ if (!$assignment_id) {
     abort(400);
 }
 
-$assignment = $db->query('SELECT
+$assignmentQuery = 'SELECT
         Assignment.assignment_id,
         Assignment.title,
         Assignment.assignment_type,
@@ -20,13 +25,16 @@ $assignment = $db->query('SELECT
         FROM Assignment
         JOIN Course ON Assignment.course_id = Course.course_id
         LEFT JOIN Submission ON Assignment.assignment_id = Submission.assign_id
-        WHERE Assignment.assignment_id = :id
-            AND Course.professor_id = :professor_id
-        GROUP BY Assignment.assignment_id, Assignment.title, Assignment.assignment_type, Course.course_name
-        ', [
-    'id' => $assignment_id,
-    'professor_id' => $professor['professor_id'],
-])->find();
+        WHERE Assignment.assignment_id = :id';
+$assignmentParams = ['id' => $assignment_id];
+
+if (!$isSuperAdmin) {
+    $assignmentQuery .= ' AND Course.professor_id = :professor_id';
+    $assignmentParams['professor_id'] = $professor['professor_id'];
+}
+
+$assignmentQuery .= ' GROUP BY Assignment.assignment_id, Assignment.title, Assignment.assignment_type, Course.course_name';
+$assignment = $db->query($assignmentQuery, $assignmentParams)->find();
 
 if (!$assignment) {
     abort(404);
@@ -53,7 +61,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         throw $exception;
     }
 
-    redirect('/dashboard');
+    $redirectTo = $assignment['assignment_type'] === 'Quiz' ? '/classrooms#quizzes' : '/classrooms#assignments';
+    redirect($redirectTo);
 }
 
 return view('Dashboard/delete-assignment', [

@@ -7,7 +7,7 @@ include(base_path('views/partials/header.view.php'));
         <div class="top-bar">
             <h2 id="page-title">Edit Course</h2>
             <div class="top-bar-actions">
-                <a href="/dashboard" class="btn btn-bronze">Back to Dashboard</a>
+                <a href="/classrooms#courses" class="btn btn-bronze">Back to Classrooms</a>
             </div>
         </div>
 

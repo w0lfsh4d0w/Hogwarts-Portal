@@ -14,10 +14,10 @@ class DashboardModel
         $this->db = App::resolve(Database::class);
     }
 
-    public function overviewForCurrentUser(): array
+    public function overviewForCurrentUser(bool $ignoreProfessorScope = false): array
     {
         $currentProfessor = is_professor() ? $this->currentProfessor() : null;
-        $professorId = $currentProfessor['professor_id'] ?? null;
+        $professorId = $ignoreProfessorScope ? null : ($currentProfessor['professor_id'] ?? null);
 
         return [
             'Students' => $this->students($professorId),

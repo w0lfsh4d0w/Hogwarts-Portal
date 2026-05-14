@@ -32,11 +32,6 @@ if (!$course) {
     abort(404);
 }
 
-if (is_professor()) {
-    $professor = require_current_professor($db);
-    authorize((int) $course['professor_id'] === (int) $professor['professor_id']);
-}
-
 return view('Dashboard/show-course', [
     'course' => $course,
 ]);

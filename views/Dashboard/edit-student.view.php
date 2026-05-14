@@ -7,7 +7,7 @@ include(base_path('views/partials/header.view.php'));
         <div class="top-bar">
             <h2 id="page-title">Edit Student</h2>
             <div class="top-bar-actions">
-                <a href="/dashboard" class="btn btn-bronze">Back to Dashboard</a>
+                <a href="/classrooms#students" class="btn btn-bronze">Back to Classrooms</a>
             </div>
         </div>
 
@@ -81,7 +81,7 @@ include(base_path('views/partials/header.view.php'));
                         <button type="submit" class="btn btn-submit">
                             <i class="fa-solid fa-save"></i> Save Changes
                         </button>
-                        <a href="/dashboard" class="btn btn-bronze" style="margin-left: 10px;">
+                        <a href="/classrooms#students" class="btn btn-bronze" style="margin-left: 10px;">
                             Cancel
                         </a>
                     </div>

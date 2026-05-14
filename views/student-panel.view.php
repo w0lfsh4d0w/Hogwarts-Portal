@@ -29,6 +29,10 @@ function studentPanelStatusClass($status)
                 <i class="fa-solid fa-circle-question"></i>
                 <span>Quizzes</span>
             </a>
+            <a href="/classrooms" class="sidebar-link">
+                <i class="fa-solid fa-chalkboard"></i>
+                <span>Classrooms</span>
+            </a>
             <a href="/" class="sidebar-link">
                 <i class="fa-solid fa-house"></i>
                 <span>Home</span>
@@ -219,56 +223,6 @@ function studentPanelStatusClass($status)
                     </table>
                 </div>
 
-                <div style="margin-top: 40px;">
-                    <h3 class="section-title">
-                        <i class="fa-solid fa-plus"></i> Choose Courses
-                    </h3>
-
-                    <div class="table-container">
-                        <table class="dashboard-table">
-                            <thead>
-                                <tr>
-                                    <th>Course</th>
-                                    <th>Professor</th>
-                                    <th>Assignments</th>
-                                    <th>Status</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php if (empty($availableCourses)): ?>
-                                    <tr>
-                                        <td colspan="5">No courses are available yet.</td>
-                                    </tr>
-                                <?php endif; ?>
-                                <?php foreach ($availableCourses as $course): ?>
-                                    <tr>
-                                        <td><?php echo htmlspecialchars($course['course_name']); ?></td>
-                                        <td><?php echo htmlspecialchars($course['professor_name']); ?></td>
-                                        <td><?php echo $course['assignments_count']; ?></td>
-                                        <td>
-                                            <?php if ($course['enrollment_status'] === 'Enrolled'): ?>
-                                                <span class="badge active">Enrolled</span>
-                                            <?php else: ?>
-                                                <span class="badge pending">Available</span>
-                                            <?php endif; ?>
-                                        </td>
-                                        <td>
-                                            <?php if ($course['enrollment_status'] === 'Enrolled'): ?>
-                                                -
-                                            <?php else: ?>
-                                                <form method="POST" action="/enroll-course" style="margin: 0;">
-                                                    <input type="hidden" name="course_id" value="<?php echo $course['course_id']; ?>">
-                                                    <button type="submit" class="btn-action edit">Enroll</button>
-                                                </form>
-                                            <?php endif; ?>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
             </section>
 
             <section id="assignments-section" class="dashboard-section">
@@ -280,14 +234,14 @@ function studentPanelStatusClass($status)
                 <h3 class="section-title">
                     <i class="fa-solid fa-list-check"></i> My Assignments
                 </h3>
-                <?php $assignments = $classAssignments; include(base_path('views/partials/student-work-table.view.php')); ?>
+                <?php $assignments = $classAssignments; $studentPanelActionTarget = '/classrooms#assignments'; $studentPanelActionLabel = 'Open in Classrooms'; include(base_path('views/partials/student-work-table.view.php')); ?>
             </section>
 
             <section id="quizzes-section" class="dashboard-section">
                 <h3 class="section-title">
                     <i class="fa-solid fa-circle-question"></i> My Quizzes
                 </h3>
-                <?php $assignments = $quizzes; include(base_path('views/partials/student-work-table.view.php')); ?>
+                <?php $assignments = $quizzes; $studentPanelActionTarget = '/classrooms#quizzes'; $studentPanelActionLabel = 'Open in Classrooms'; include(base_path('views/partials/student-work-table.view.php')); ?>
             </section>
 
         </div>

@@ -16,9 +16,9 @@ include(base_path('views/partials/header.view.php'));
                 <i class="fa-solid fa-book-open"></i>
                 <span>My Courses</span>
             </a>
-            <a href="/dashobard" class="sidebar-link" data-section="courses">
-                <i class="fa-solid fa-book-open"></i>
-                <span>Dashboard</span>
+            <a href="/classrooms" class="sidebar-link">
+                <i class="fa-solid fa-chalkboard"></i>
+                <span>Classrooms</span>
             </a>
             <a href="/" class="sidebar-link">
                 <i class="fa-solid fa-house"></i>

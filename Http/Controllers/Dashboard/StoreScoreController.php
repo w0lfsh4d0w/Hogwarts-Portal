@@ -3,7 +3,12 @@
 use Core\App;
 
 $db = App::resolve('Core\Database');
-$professor = require_current_professor($db);
+$isSuperAdmin = is_dumbledore();
+$professor = null;
+
+if (!$isSuperAdmin) {
+    $professor = require_current_professor($db);
+}
 
 $assignmentId = $_POST['assignment_id'] ?? null;
 $studentId = $_POST['student_id'] ?? null;
@@ -23,7 +28,7 @@ $assignment = $db->query('SELECT
         WHERE Assignment.assignment_id = :assignment_id
         ', ['assignment_id' => $assignmentId])->find();
 
-if (!$assignment || (int) $assignment['professor_id'] !== (int) $professor['professor_id']) {
+if (!$assignment || (!$isSuperAdmin && (int) $assignment['professor_id'] !== (int) $professor['professor_id'])) {
     abort(404);
 }
 
