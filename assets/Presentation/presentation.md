@@ -7,7 +7,7 @@
 - It explains:
   `Who uses the system and what they want to do`
 
-![Use Case Diagram](usecase.jpeg)
+![Use Case Diagram](../../usecase.jpeg)
 
 ## Requirements
 
