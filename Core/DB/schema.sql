@@ -190,6 +190,8 @@ CREATE INDEX idx_housepoints_house ON HousePoints(house_id);
 CREATE INDEX idx_inventory_item    ON Inventory(item_id);
 CREATE INDEX idx_message_sender    ON Message(sender_id);
 CREATE INDEX idx_message_receiver  ON Message(receiver_id);
+CREATE INDEX idx_message_pair_time ON Message(sender_id, receiver_id, sent_at);
+CREATE INDEX idx_message_inbox     ON Message(receiver_id, is_read, sent_at);
 
 -- TRIGGER: auto-update House.total_points
 -- when a new HousePoints row is inserted

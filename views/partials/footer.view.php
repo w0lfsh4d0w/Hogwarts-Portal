@@ -3,7 +3,7 @@
     <div class="container-fluid footer-inner">
         <div class="row align-items-center">
             <div class="col-12 col-md-9 footer-copy">
-                <p>&copy; 2023 Hogwarts School of Witchcraft and Wizardry. All rights reserved.</p>
+                <p>&copy; 2026 Hogwarts School of Witchcraft and Wizardry. All rights reserved.</p>
             </div>
             <div class="col-12 col-md-3 footer-logo text-center text-md-end">
                 <img src="/assets/img/sorting-hat.png" alt="Hogwarts logo">

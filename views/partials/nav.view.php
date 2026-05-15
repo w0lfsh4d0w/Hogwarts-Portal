@@ -23,6 +23,11 @@ $dashboardPages = [
   '/delete-assignment',
 ];
 
+function nav_active(string $currentPath, array $paths): string
+{
+  return in_array($currentPath, $paths, true) ? 'active' : '';
+}
+
 if ($isStaff && in_array($request, $dashboardPages, true)) {
 ?>
   <!-- Enhanced Dashboard Navbar -->
@@ -51,14 +56,19 @@ if ($isStaff && in_array($request, $dashboardPages, true)) {
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav mx-auto">
           <!-- Home Link -->
-          <a class="nav-link magical-link" href="/">
+          <a class="nav-link magical-link <?php echo nav_active($request, ['/']); ?>" href="/">
             <i class="fa-solid fa-house-chimney me-1"></i>
             <span>Home</span>
           </a>
 
-          <a class="nav-link magical-link" href="/classrooms">
+          <a class="nav-link magical-link <?php echo nav_active($request, ['/classrooms']); ?>" href="/classrooms">
             <i class="fa-solid fa-chalkboard me-1"></i>
             <span>Classrooms</span>
+          </a>
+
+          <a class="nav-link magical-link <?php echo nav_active($request, ['/owlery']); ?>" href="/owlery">
+            <i class="fa-solid fa-envelope-open-text me-1"></i>
+            <span>Owlery</span>
           </a>
         </div>
 
@@ -432,7 +442,7 @@ if ($isStaff && in_array($request, $dashboardPages, true)) {
       <a class="navbar-brand hogwarts-brand" href="/">
         <i class="fa-solid fa-hat-wizard me-2"></i>
         <span class="brand-text">Hogwarts</span>
-        <span class="brand-subtitle">School of Witchcraft & Wizardry</span>
+        <span class="brand-subtitle">School of Wizard</span>
       </a>
 
       <!-- Mobile Toggle -->
@@ -445,7 +455,7 @@ if ($isStaff && in_array($request, $dashboardPages, true)) {
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav mx-auto">
           <!-- Home Link -->
-          <a class="nav-link magical-link active" aria-current="page" href="/">
+          <a class="nav-link magical-link <?php echo nav_active($request, ['/']); ?>" aria-current="page" href="/">
             <i class="fa-solid fa-house-chimney me-1"></i>
             <span>Home</span>
           </a>
@@ -463,40 +473,45 @@ if ($isStaff && in_array($request, $dashboardPages, true)) {
           </a>
 
           <?php if ($isAuthenticated): ?>
-            <a class="nav-link magical-link" href="/classrooms">
+            <a class="nav-link magical-link <?php echo nav_active($request, ['/classrooms']); ?>" href="/classrooms">
               <i class="fa-solid fa-chalkboard me-1"></i>
               <span>Classrooms</span>
+            </a>
+
+            <a class="nav-link magical-link <?php echo nav_active($request, ['/owlery']); ?>" href="/owlery">
+              <i class="fa-solid fa-envelope-open-text me-1"></i>
+              <span>Owlery</span>
             </a>
           <?php endif; ?>
 
           <?php if ($isAuthenticated && $role === 'Student'): ?>
-            <a class="nav-link magical-link" href="/shop">
+            <a class="nav-link magical-link <?php echo nav_active($request, ['/shop']); ?>" href="/shop">
               <i class="fa-solid fa-cart-shopping me-1"></i>
               <span>Shop</span>
             </a>
 
-            <a class="nav-link magical-link" href="/inventory">
+            <a class="nav-link magical-link <?php echo nav_active($request, ['/inventory']); ?>" href="/inventory">
               <i class="fa-solid fa-box-archive me-1"></i>
               <span>Inventory</span>
             </a>
           <?php endif; ?>
 
           <?php if ($role === 'Dumbledore'): ?>
-            <a class="nav-link magical-link dashboard-link" href="/dashboard">
+            <a class="nav-link magical-link dashboard-link <?php echo nav_active($request, $dashboardPages); ?>" href="/dashboard">
               <i class="fa-solid fa-chart-line me-1"></i>
               <span>Dumbledore Panel</span>
             </a>
           <?php endif; ?>
 
           <?php if ($role === 'Professor'): ?>
-            <a class="nav-link magical-link dashboard-link" href="/dashboard">
+            <a class="nav-link magical-link dashboard-link <?php echo nav_active($request, $dashboardPages); ?>" href="/dashboard">
               <i class="fa-solid fa-chalkboard-user me-1"></i>
               <span>Professor Dashboard</span>
             </a>
           <?php endif; ?>
 
           <?php if ($role === 'Student'): ?>
-            <a class="nav-link magical-link" href="/student-panel">
+            <a class="nav-link magical-link <?php echo nav_active($request, ['/student-panel']); ?>" href="/student-panel">
               <i class="fa-solid fa-user-graduate me-1"></i>
               <span>Student Panel</span>
             </a>
