@@ -12,6 +12,38 @@ A PHP/MySQL school portal inspired by Hogwarts. Students can register, enroll in
 - Diagon Alley shop and student inventory.
 - Animated home page with quick links for students, staff, and guests.
 
+## 📁 Folder Structure
+
+> To get Folder Structure use command but you should install tree
+- for windows  `tree /A`
+- Linux `sudo apt install tree`
+
+```bash
+tree -d -L 3
+```
+
+```
+.
+├── Core
+│   ├── DB
+│   └── Middleware
+├── Http
+│   ├── Controllers
+│   ├── Forms
+│   └── Models
+├── public
+│   └── assets
+└── views
+    ├── Dashboard
+    ├── inventory
+    ├── partials
+    ├── registration
+    ├── session
+    ├── shop
+    └── student
+
+```
+
 ## Tech Stack
 
 - PHP
