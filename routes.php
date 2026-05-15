@@ -23,6 +23,10 @@ $router->post('/shop/buy', 'shop/store.php')->only('student');
 $router->get('/inventory', 'inventory/index.php')->only('student');
 $router->post('/inventory/remove', 'inventory/store.php')->only('student');
 
+// Owlery messaging
+$router->get('/owlery', 'owlery/index.php')->only('auth');
+$router->post('/owlery/send', 'owlery/store.php')->only('auth');
+
 // Leaderboard
 $router->get('/leaderboard', 'leaderboard/LeaderboardController.php');
 

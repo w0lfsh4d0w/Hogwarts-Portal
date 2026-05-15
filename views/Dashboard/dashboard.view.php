@@ -33,6 +33,10 @@ $professorActionVerb = $canCreateProfessor ? 'Manage' : 'View';
                 <i class="fa-solid fa-chalkboard"></i>
                 <span>Classrooms</span>
             </a>
+            <a href="/owlery" class="sidebar-link">
+                <i class="fa-solid fa-envelope-open-text"></i>
+                <span>Owlery</span>
+            </a>
             <a href="/leaderboard" class="sidebar-link">
                 <i class="fa-solid fa-trophy"></i>
                 <span>Leaderboard</span>

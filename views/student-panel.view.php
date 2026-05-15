@@ -33,6 +33,10 @@ function studentPanelStatusClass($status)
                 <i class="fa-solid fa-chalkboard"></i>
                 <span>Classrooms</span>
             </a>
+            <a href="/owlery" class="sidebar-link">
+                <i class="fa-solid fa-envelope-open-text"></i>
+                <span>Owlery</span>
+            </a>
             <a href="/" class="sidebar-link">
                 <i class="fa-solid fa-house"></i>
                 <span>Home</span>
