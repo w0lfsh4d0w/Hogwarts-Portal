@@ -9,8 +9,13 @@ $container = new Container();
 $container->bind('Core\Database', function () {
 
     $config = require BASE_PATH . 'config.php';
+    $database = $config['database'];
+    $username = $database['username'];
+    $password = $database['password'];
 
-    return new \Core\Database($config['database']);
+    unset($database['username'], $database['password']);
+
+    return new \Core\Database($database, $username, $password);
 });
 
 App::setContainer($container);

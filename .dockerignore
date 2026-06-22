@@ -1,0 +1,5 @@
+.git
+db_data
+node_modules
+vendor
+*.log

@@ -54,6 +54,54 @@ tree -d -L 3
 
 ## Setup
 
+### Run with Docker
+
+1. Clone the repository.
+
+```bash
+git clone https://github.com/w0lfsh4d0w/Hogwarts-Portal.git
+cd Hogwarts-Portal
+```
+
+2. Build and start the PHP and MySQL containers.
+
+```bash
+docker compose up --build
+```
+
+3. Wait until MySQL finishes importing `Core/DB/schema.sql`.
+
+The first startup creates the `hogwarts_db` database and seeds the demo data. This can take a short moment.
+
+4. Open the app in your browser.
+
+```text
+http://localhost:8888
+```
+
+5. Stop the containers when you are done.
+
+```bash
+docker compose down
+```
+
+6. Reset the Docker database if you need a fresh seed.
+
+```bash
+docker compose down -v
+docker compose up --build
+```
+
+The Docker setup uses these default database values:
+
+- Host inside Docker: `db`
+- Host from your machine: `localhost:3307`
+- Database: `hogwarts_db`
+- Username: `root`
+- Password: `MyRoot@1234`
+
+### Run Locally Without Docker
+
 1. Clone the repository.
 
 ```bash
@@ -67,7 +115,7 @@ cd Hogwarts-Portal
 mysql -u root -p < Core/DB/schema.sql
 ```
 
-3. Update database credentials in `Core/Database.php` or your local config if needed.
+3. Update database credentials in `config.php` or set `DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USERNAME`, and `DB_PASSWORD` environment variables if needed.
 
 4. Start the local PHP server.
 
