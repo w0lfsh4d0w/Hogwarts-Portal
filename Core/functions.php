@@ -40,6 +40,7 @@ function is_professor() {
     return user_role() === 'Professor';
 }
 
+
 function is_dumbledore() {
     return user_role() === 'Dumbledore';
 }
