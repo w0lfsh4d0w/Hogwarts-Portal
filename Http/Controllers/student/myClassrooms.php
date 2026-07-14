@@ -3,7 +3,8 @@ use Http\Models\CourseModel;
 use Http\Models\QuizModel;
 use Core\Session;
 
-$studentId = $_SESSION['user']['student_id'] ?? null;
+$user = \Core\JwtService::verify(\Core\JwtService::getTokenFromCookie());
+$studentId = $user['student_id'] ?? null;
 if (!$studentId) abort(403);
 
 $courseModel = new CourseModel();

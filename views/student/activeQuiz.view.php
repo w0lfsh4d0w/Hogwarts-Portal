@@ -9,7 +9,8 @@ $houseNames = [
     4 => ['name' => 'Hufflepuff', 'color' => '#FFDB00', 'accent' => '#000000'],
 ];
 
-$houseId = $_SESSION['user']['house_id'] ?? 1;
+$user = \Core\JwtService::verify(\Core\JwtService::getTokenFromCookie());
+$houseId = $user['house_id'] ?? 1;
 $theme = $houseNames[$houseId] ?? $houseNames[1];
 ?>
 

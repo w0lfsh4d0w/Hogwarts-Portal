@@ -11,7 +11,7 @@ $signedIn = (new Authenticator)->attempt($attributes['email'], $attributes['pass
 if (!$signedIn) {
     $form->error('email', 'No matching password found for that email address.')->throw();
     }
-$user = $_SESSION['user'] ?? [];
+$user = \Core\JwtService::verify(\Core\JwtService::getTokenFromCookie()) ?? [];
 
 if (($user['role'] ?? null) === 'Dumbledore') {
     redirect('/dashboard');

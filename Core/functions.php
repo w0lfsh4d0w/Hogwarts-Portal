@@ -25,7 +25,11 @@ function authorize($condition, $status = Response::FORBIDDEN) {
 }
 
 function current_user() {
-    return $_SESSION['user'] ?? null;
+    $token = \Core\JwtService::getTokenFromCookie();
+    
+    if (!$token) return null;
+    
+    return \Core\JwtService::verify($token);
 }
 
 function user_role() {

@@ -5,7 +5,8 @@ use Http\Models\StudentModel;
 use Http\Models\WandModel;
 use Core\Session;
 
-$studentId      = $_SESSION['user']['student_id'];
+$user = \Core\JwtService::verify(\Core\JwtService::getTokenFromCookie());
+$studentId = $user['student_id'] ?? null;
 $inventoryModel = new InventoryModel();
 $studentModel   = new StudentModel();
 $wandModel      = new WandModel();

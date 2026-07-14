@@ -1,7 +1,8 @@
 <?php
 use Http\Models\QuizModel;
 
-$studentId = $_SESSION['user']['student_id'] ?? null;
+$user = \Core\JwtService::verify(\Core\JwtService::getTokenFromCookie());
+$studentId = $user['student_id'] ?? null;
 $assignmentId = $_GET['id'] ?? null;
 
 if (!$studentId || !$assignmentId) abort(404);

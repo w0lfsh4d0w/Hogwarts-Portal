@@ -12,7 +12,7 @@ class Authenticator
         $user = $userModel->findUserWithStudent($email);
 
         if ($user) {
-            if (password_verify($password, $user['password']) || hash_equals($user['password'], $password)) {
+            if (password_verify($password, $user['password']) ) {
                 $this->login($user);
                 return true;
             }
@@ -20,22 +20,21 @@ class Authenticator
         return false;
     }
 
-    public function login($user)
-    {
-        $_SESSION['user'] = [
-            'user_id' => $user['user_id'] ?? null,
-            'user_name' => $user['user_name'] ?? null,
-            'email' => $user['email'],
-            'role' => $user['role'] ?? null,
-            'student_id' => $user['student_id'] ?? null,
-            'house_id' => $user['house_id'] ?? null,
-        ];
+  public function login($user)
+{
+    $token = JwtService::generate([
+        'user_id'    => $user['user_id'],
+        'student_id' => $user['student_id'],
+        'email'      => $user['email'],
+        'role'       => $user['role'],
+        'house_id'   => $user['house_id']
+    ]);
 
-        session_regenerate_id(true);
-    }
+    JwtService::setTokenCookie($token);
+}
 
-    public function logout()
-    {
-        Session::destroy();
-    }
+   public function logout()
+{
+    setcookie('token', '', time() - 3600, '/');
+}
 }

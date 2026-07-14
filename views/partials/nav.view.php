@@ -5,7 +5,7 @@ $userName = $user['user_name'] ?? 'Guest';
 $isStaff = is_staff();
 $header = $role === 'Professor' ? 'Professor Dashboard' : 'Dashboard';
 $request = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-$isAuthenticated = isset($_SESSION['user']);
+$isAuthenticated = current_user() !== null;
 $dashboardPages = [
   '/dashboard',
   '/show-student',
@@ -521,7 +521,7 @@ if ($isStaff && in_array($request, $dashboardPages, true)) {
         <!-- Auth Section -->
         <div class="navbar-nav ms-auto">
           <div class="auth-buttons">
-            <?php if (isset($_SESSION['user'])): ?>
+            <?php if (current_user()): ?>
               <form action="/logout" method="POST" class="m-0">
                 <input type="hidden" name="_method" value="DELETE">
                 <button type="submit" class="nav-link btn-auth logout-btn">

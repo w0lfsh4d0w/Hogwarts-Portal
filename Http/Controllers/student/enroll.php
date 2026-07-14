@@ -2,7 +2,8 @@
 use Http\Models\CourseModel;
 use Core\Session;
 
-$studentId = $_SESSION['user']['student_id'] ?? null;
+$user = \Core\JwtService::verify(\Core\JwtService::getTokenFromCookie());
+$studentId = $user['student_id'] ?? null;
 $courseId = $_POST['course_id'] ?? null;
 
 if (!$studentId || !$courseId) {

@@ -3,7 +3,8 @@
 use Core\Session;
 use Http\Models\InventoryModel;
 
-$studentId = $_SESSION['user']['student_id'] ?? null;
+$user = \Core\JwtService::verify(\Core\JwtService::getTokenFromCookie());
+$studentId = $user['student_id'] ?? null;
 $itemId = $_POST['item_id'] ?? null;
 
 if (!$studentId || !$itemId) {

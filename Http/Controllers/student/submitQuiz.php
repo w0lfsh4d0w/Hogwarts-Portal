@@ -3,8 +3,9 @@ use Http\Models\SubmissionModel;
 use Http\Models\QuizModel;
 use Core\Session;
 
-$studentId = $_SESSION['user']['student_id'] ?? null;
-$houseId = $_SESSION['user']['house_id'] ?? null;
+$user = \Core\JwtService::verify(\Core\JwtService::getTokenFromCookie());
+$studentId = $user['student_id'] ?? null;
+$houseId = $user['house_id'] ?? null;
 $assignmentId = $_POST['assignment_id'] ?? null;
 
 if (!$studentId || !$assignmentId) {
