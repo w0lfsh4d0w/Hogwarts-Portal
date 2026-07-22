@@ -4,25 +4,25 @@ use Core\Authenticator;
 use Http\Forms\LoginForm;
 
 $form = LoginForm::validate($attributes = [
-    'email' =>  $_POST['email'],
+    'email'    => $_POST['email'],
     'password' => $_POST['password']
 ]);
-$signedIn = (new Authenticator)->attempt($attributes['email'], $attributes['password']);
+
+$auth = new Authenticator();
+$signedIn = $auth->attempt($attributes['email'], $attributes['password']);
+
 if (!$signedIn) {
     $form->error('email', 'No matching password found for that email address.')->throw();
-    }
-$user = \Core\JwtService::verify(\Core\JwtService::getTokenFromCookie()) ?? [];
+}
 
-if (($user['role'] ?? null) === 'Dumbledore') {
+$role = $auth->getLastUserRole();
+
+if ($role === 'Dumbledore' || $role === 'Professor') {
     redirect('/dashboard');
 }
 
-if (($user['role'] ?? null) === 'Student') {
+if ($role === 'Student') {
     redirect('/student-panel');
-}
-
-if (($user['role'] ?? null) === 'Professor') {
-    redirect('/dashboard');
 }
 
 redirect('/');

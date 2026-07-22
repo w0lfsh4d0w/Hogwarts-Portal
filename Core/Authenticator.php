@@ -6,6 +6,9 @@ use Http\Models\UserModel;
 
 class Authenticator
 {
+    private $lastUserRole = null;
+
+
     public function attempt($email, $password)
     {
         $userModel = new UserModel();
@@ -14,6 +17,7 @@ class Authenticator
         if ($user) {
             if (password_verify($password, $user['password']) ) {
                 $this->login($user);
+                $this->lastUserRole = $user['role'];
                 return true;
             }
         }
@@ -36,5 +40,9 @@ class Authenticator
    public function logout()
 {
     setcookie('token', '', time() - 3600, '/');
+}
+public function getLastUserRole()
+{
+    return $this->lastUserRole;
 }
 }
